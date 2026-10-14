@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "dev.aika.clienttweaks.mixin",
+  "plugin": "dev.aika.clienttweaks.boot.ModMixinPlugin",
+  "compatibilityLevel": "${java}",
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "RemoveRealmsButton.TitleScreenMixin"
+  ]
+}
