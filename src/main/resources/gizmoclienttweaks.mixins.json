@@ -9,6 +9,10 @@
     "defaultRequire": 1
   },
   "client": [
-    "RemoveRealmsButton.TitleScreenMixin"
+    "Accessor.SoundEngineAccessor",
+    "Accessor.SoundManagerAccessor",
+    "BetterLanguageFilter.LanguageSelectionListMixin",
+    "RemoveRealmsButton.TitleScreenMixin",
+    "Unfocused.WindowMixin"
   ]
 }

@@ -14,5 +14,13 @@ public class ClientTweaksConfig {
     private Boolean removeRealmsButton = // 开发环境默认启用
             ModLoaderAccess.INSTANCE.isDevelopmentEnvironment();
     private Boolean betterLanguageFilter = true;
+    private UnfocusedConfig unfocused = new UnfocusedConfig();
     private Set<String> disabledMixins = new LinkedHashSet<>();
+
+    @Getter @Setter
+    @Accessors(fluent = true)
+    public static class UnfocusedConfig {
+        private int framerateLimit = 10;
+        private Boolean mute = true;
+    }
 }

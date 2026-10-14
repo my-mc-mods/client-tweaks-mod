@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 //? if >=1.21.11 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.aika.clienttweaks.boot.ModConfig;
 import net.minecraft.client.resources.language.LanguageInfo;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -24,6 +25,8 @@ public abstract class LanguageSelectionListMixin { //? if >=1.21.11 {
             Operation<Stream<Map.Entry<String, LanguageInfo>>> operation,
             String filter
     ) {
+        if (!ModConfig.get().betterLanguageFilter()) return operation.call(instance, original);
+
         final var f = filter.toLowerCase(Locale.ROOT);
         return operation.call(instance, (Predicate<Map.Entry<String, LanguageInfo>>)
                 entry -> filter.isEmpty()
