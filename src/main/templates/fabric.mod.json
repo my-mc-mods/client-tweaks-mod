@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "generated-at-build-time",
+  "version": "0.0.0-generated-at-build-time",
+  "name": "generated at build time",
+  "description": "generated at build time",
+  "authors": [
+    "generated at build time"
+  ],
+  "license": "generated at build time",
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      "dev.aika.clienttweaks.ClientTweaksModFabric"
+    ]
+  },
+  "mixins": [
+    "gizmoclienttweaks.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "${minecraft_compat}",
+    "fabric-rendering-v1": "*",
+    "fabric-lifecycle-events-v1": "*"
+  },
+  "accessWidener": "gizmoclienttweaks.ct"
+}

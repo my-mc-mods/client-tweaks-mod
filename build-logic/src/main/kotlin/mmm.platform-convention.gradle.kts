@@ -1,0 +1,88 @@
+import dev.kikugie.semver.data.SemanticVersion
+
+plugins {
+    id("java-library")
+    id("maven-publish")
+    id("mmm.shadow-convention")
+}
+
+val (xVersion, loader) = name.split('-', limit = 2)
+val modVersion = SemanticVersion.parse("mod.version"())
+
+version = "${"mod.version"().removeSuffix("-SNAPSHOT")}+${sc(project).current.version}"
+
+tasks {
+    // Includes the license file in the built mod
+    withType<Jar> {
+        inputs.property("mod_id", "mod.id"())
+
+        listOf("LICENSE", "NOTICE", "LICENSE.txt", "NOTICE.txt").forEach { p ->
+            from(rootProject.file(p)) {
+                rename { "${"mod.id"()}-${it}" }
+            }
+            from(rootProject.file(kotlin.io.path.Path(".custom", p))) {
+                rename { "${"mod.id"()}-${it}" }
+            }
+        }
+    }
+
+    processResources {
+        rootProject.file(".custom/assets/icon.png").let {
+            if (it.exists()) from(it) { rename { "${"mod.id"()}_icon.png" } }
+            else from(rootProject.file("assets/icon.png")) { rename { "${"mod.id"()}_icon.png" } }
+        }
+
+        fun MutableMap<String, String>.register(key: String, value: String) {
+            inputs.property(key, value)
+            set(key, value)
+        }
+
+        val props = buildMap {
+            register("mod_id", "mod.id"())
+            register("mod_name", "mod.name"())
+            register("mod_version", "mod.version"().removeSuffix("-SNAPSHOT"))
+            register("mod_license", "mod.license"())
+            register("minecraft_compat", "mod.mc_compat"())
+            if (isFabric) register("fabric_api", "deps.fabric_api"())
+        }
+
+        filesMatching(listOf("fabric.mod.json", "pack.mcmeta", "META-INF/neoforge.mods.toml")) {
+            expand(props) { escapeBackslash = true }
+        }
+
+        filesMatching("*.mixins.json") { expand("java" to "JAVA_${requiredJava.majorVersion}") }
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            artifactId = "${"mod.id"()}-$loader"
+            groupId = "mod.group"()
+            version = listOf(
+                modVersion.components.joinToString("."),
+                xVersion, modVersion.preRelease
+            ).filter { it.isNotBlank() }.joinToString("-")
+
+            from(components["java"])
+        }
+    }
+}
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+    options.release.set(requiredJava.majorVersion.toInt())
+}
+
+java {
+    withSourcesJar()
+    targetCompatibility = requiredJava
+    sourceCompatibility = requiredJava
+
+    toolchain {
+        vendor = JvmVendorSpec.ADOPTIUM
+        languageVersion = JavaLanguageVersion.of(requiredJava.majorVersion)
+    }
+}
+
+operator fun String.invoke(): String = project.ext[this] as? String ?: error("No property \"$this\"")

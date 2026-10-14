@@ -1,0 +1,21 @@
+license = "generated at build time"
+
+modLoader="javafml"
+loaderVersion="[1,)"
+
+[[mods]]
+modId = "generated-at-build-time"
+displayName = "generated at build time"
+version = "0.0.0-generated-at-build-time"
+authors = "generated at build time"
+description = "generated at build time"
+
+[[dependencies.generated-at-build-time]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_compat}"
+ordering = "NONE"
+side = "CLIENT"
+
+[[mixins]]
+config = "gizmoclienttweaks.mixins.json"

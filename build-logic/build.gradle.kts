@@ -1,0 +1,25 @@
+import java.util.Properties
+
+plugins {
+    `kotlin-dsl`
+}
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+    maven("https://maven.fabricmc.net/") { name = "FabricMC" }
+    maven("https://maven.kikugie.dev/releases") { name = "KikuGie Releases" }
+}
+
+val rootProperties = Properties().apply { file("../gradle.properties").inputStream().use(::load) }
+
+dependencies {
+    implementation("tools.jackson.core:jackson-core:3.2.3")
+    implementation("tools.jackson.core:jackson-databind:3.2.3")
+    implementation("io.hotmoka:toml4j:0.7.3")
+
+    fun implementationPlugin(dep: String, version: String) = implementation("$dep:$dep.gradle.plugin:$version")
+    implementationPlugin("com.gradleup.shadow", libs.versions.shadow.get())
+    implementationPlugin("dev.kikugie.stonecutter", rootProperties.getProperty("stonecutter"))
+    implementationPlugin("net.fabricmc.fabric-loom-companion", "1.18.2")
+}

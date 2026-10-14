@@ -1,0 +1,10 @@
+[versions]
+# Plugins
+shadow = "9.4.1"
+# https://projects.neoforged.net/neoforged/moddevgradle
+neoforged-moddev = "2.0.148"
+
+lombok = "1.18.48"
+
+[libraries]
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
