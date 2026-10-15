@@ -14,6 +14,7 @@ public class ClientTweaksConfig {
     private Boolean removeRealmsButton = // 开发环境默认启用
             ModLoaderAccess.INSTANCE.isDevelopmentEnvironment();
     private Boolean betterLanguageFilter = true;
+    private Boolean smartFireOverlay = false;
     private UnfocusedConfig unfocused = new UnfocusedConfig();
     private Set<String> disabledMixins = new LinkedHashSet<>();
 

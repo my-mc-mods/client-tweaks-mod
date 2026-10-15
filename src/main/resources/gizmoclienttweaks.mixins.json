@@ -13,6 +13,7 @@
     "Accessor.SoundManagerAccessor",
     "BetterLanguageFilter.LanguageSelectionListMixin",
     "RemoveRealmsButton.TitleScreenMixin",
+    "SmartFireOverlay.ScreenEffectRendererMixin",
     "Unfocused.WindowMixin"
   ]
 }
