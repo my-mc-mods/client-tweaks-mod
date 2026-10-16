@@ -11,10 +11,13 @@ import java.util.Set;
 @Getter @Setter
 @Accessors(fluent = true)
 public class ClientTweaksConfig {
-    private Boolean removeRealmsButton = // 开发环境默认启用
-            ModLoaderAccess.INSTANCE.isDevelopmentEnvironment();
+    private transient final Boolean isDevEnv = ModLoaderAccess.INSTANCE.isDevelopmentEnvironment();
+
+    private Boolean removeRealmsButton = isDevEnv;
     private Boolean betterLanguageFilter = true;
     private Boolean smartFireOverlay = false;
+    private Boolean hideUnsecureWarningToast = isDevEnv;
+
     private UnfocusedConfig unfocused = new UnfocusedConfig();
     private Set<String> disabledMixins = new LinkedHashSet<>();
 
