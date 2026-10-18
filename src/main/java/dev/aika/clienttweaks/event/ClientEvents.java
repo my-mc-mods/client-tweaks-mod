@@ -13,7 +13,6 @@ public class ClientEvents {
 
     public void onClientStarted() {
         initialized = true;
-        Unfocused.init();
     }
 
     public void onClientStarted(Minecraft ignoredMinecraft) {

@@ -9,15 +9,16 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.Map;
 
+@SuppressWarnings("unused")
 @Mixin(SoundEngine.class)
 public interface SoundEngineAccessor {
     @Accessor("instanceToChannel")
-    Map<SoundInstance, ChannelAccess.ChannelHandle> clienttweaks$getInstanceToChannel();
+    Map<SoundInstance, ChannelAccess.ChannelHandle> getInstanceToChannel();
 
     @Accessor("loaded")
-    boolean clienttweaks$isLoaded();
+    boolean isLoaded();
 
     @SuppressWarnings("unused")
     @Invoker("calculateVolume")
-    float clienttweaks$calculateVolume(SoundInstance instance);
+    float calculateVolume(SoundInstance instance);
 }

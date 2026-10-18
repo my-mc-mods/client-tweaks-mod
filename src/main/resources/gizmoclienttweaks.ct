@@ -1,3 +1,4 @@
 classTweaker v2 official
 
 accessible class net/minecraft/client/gui/screens/options/LanguageSelectScreen$LanguageSelectionList
+accessible field net/minecraft/client/sounds/SoundManager soundEngine Lnet/minecraft/client/sounds/SoundEngine;

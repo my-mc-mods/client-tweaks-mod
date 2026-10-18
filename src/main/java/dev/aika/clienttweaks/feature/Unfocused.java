@@ -2,20 +2,15 @@ package dev.aika.clienttweaks.feature;
 
 import dev.aika.clienttweaks.boot.ModConfig;
 import dev.aika.clienttweaks.event.ClientEvents;
-import dev.aika.clienttweaks.mixin.Accessor.SoundEngineAccessor;
-import dev.aika.clienttweaks.mixin.Accessor.SoundManagerAccessor;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.sounds.SoundSource;
 
 @UtilityClass
 public class Unfocused {
-    private static SoundEngine soundEngine;
-
-    public void init() {
-        soundEngine = ((SoundManagerAccessor) Minecraft.getInstance().getSoundManager()).clienttweaks$getSoundEngine();
-    }
+    @Getter
+    private static boolean muted;
 
     public void onWindowFocusChanged(boolean focused) {
         if (!ClientEvents.isInitialized()) return;
@@ -26,29 +21,27 @@ public class Unfocused {
         if (conf.framerateLimit() > 0) {
             setFramerateLimit(focused ? mc.options.framerateLimit().get() : conf.framerateLimit());
         }
-        if (conf.mute()) {
-            if (!focused) setVolume(0f);
-            else refreshMasterVolume();
-        }
+        if (conf.mute()) setMuted(!focused);
     }
 
-    @SuppressWarnings({"SameParameterValue", "unused"})
-    private void setVolume(float volume) {
-        if (!((SoundEngineAccessor) soundEngine).clienttweaks$isLoaded()) return;
-        ((SoundEngineAccessor) soundEngine).clienttweaks$getInstanceToChannel()
-                .forEach((instance, handle)
-                        -> handle.execute((channel) -> channel.setVolume(volume)));
+    private void setMuted(boolean value) {
+        if (value != muted) {
+            muted = value;
+            refreshMasterVolume();
+        }
     }
 
     @SuppressWarnings("SameParameterValue")
     private void refreshMasterVolume() {
         //? if >=1.21.11 {
         Minecraft.getInstance().getSoundManager().refreshCategoryVolume(SoundSource.MASTER); //?} else {
-        /*if (!((SoundEngineAccessor) soundEngine).clienttweaks$isLoaded()) return;
+        /*var soundEngine = (dev.aika.clienttweaks.mixin.Accessor.SoundEngineAccessor)
+                Minecraft.getInstance().getSoundManager().soundEngine;
+        if (!soundEngine.isLoaded()) return;
 
-        ((SoundEngineAccessor) soundEngine).clienttweaks$getInstanceToChannel().forEach((instance, handle) -> {
+        soundEngine.getInstanceToChannel().forEach((instance, handle) -> {
             if (instance.getSource() == SoundSource.MASTER) {
-                float volume = ((SoundEngineAccessor) soundEngine).clienttweaks$calculateVolume(instance);
+                float volume = soundEngine.calculateVolume(instance);
                 handle.execute((channel) -> channel.setVolume(volume));
             }
         });*///?}

@@ -9,12 +9,12 @@
     "defaultRequire": 1
   },
   "client": [
-    "HideUnsecureWarningToast.ToastManagerMixin",
     "Accessor.SoundEngineAccessor",
-    "Accessor.SoundManagerAccessor",
     "BetterLanguageFilter.LanguageSelectionListMixin",
+    "HideUnsecureWarningToast.ToastManagerMixin",
     "RemoveRealmsButton.TitleScreenMixin",
     "SmartFireOverlay.ScreenEffectRendererMixin",
+    "Unfocused.SoundEngineMixin",
     "Unfocused.WindowMixin"
   ]
 }
