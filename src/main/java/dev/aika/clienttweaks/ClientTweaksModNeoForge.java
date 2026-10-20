@@ -1,18 +1,27 @@
 package dev.aika.clienttweaks;
 
 //? if neoforge {
-/*import dev.aika.clienttweaks.event.ClientEvents;
+/*import dev.aika.clienttweaks.boot.ModConfig;
+import dev.aika.clienttweaks.event.ClientEvents;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
-@Mod(value = Constants.MOD_ID)
+@Mod(value = Constants.MOD_ID, dist = Dist.CLIENT)
 public final class ClientTweaksModNeoForge {
-    public ClientTweaksModNeoForge() {
+    public ClientTweaksModNeoForge(ModContainer container) {
         ClientTweaksMod.init();
+        container.registerExtensionPoint(IConfigScreenFactory.class,
+                (ignoreContainer, parent) -> {
+                    ModConfig.load();
+                    return parent;
+                }
+        );
     }
 
     @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)

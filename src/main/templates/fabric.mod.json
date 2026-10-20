@@ -12,6 +12,9 @@
   "entrypoints": {
     "main": [
       "dev.aika.clienttweaks.ClientTweaksModFabric"
+    ],
+    "modmenu": [
+      "dev.aika.clienttweaks.compat.ModMenuIntegration"
     ]
   },
   "mixins": [
