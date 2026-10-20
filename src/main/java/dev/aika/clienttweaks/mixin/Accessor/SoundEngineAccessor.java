@@ -13,12 +13,12 @@ import java.util.Map;
 @Mixin(SoundEngine.class)
 public interface SoundEngineAccessor {
     @Accessor("instanceToChannel")
-    Map<SoundInstance, ChannelAccess.ChannelHandle> getInstanceToChannel();
+    Map<SoundInstance, ChannelAccess.ChannelHandle> clienttweaks$getInstanceToChannel();
 
     @Accessor("loaded")
-    boolean isLoaded();
+    boolean clienttweaks$isLoaded();
 
     @SuppressWarnings("unused")
     @Invoker("calculateVolume")
-    float calculateVolume(SoundInstance instance);
+    float clienttweaks$calculateVolume(SoundInstance instance);
 }

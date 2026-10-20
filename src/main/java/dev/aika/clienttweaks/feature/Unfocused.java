@@ -37,11 +37,11 @@ public class Unfocused {
         Minecraft.getInstance().getSoundManager().refreshCategoryVolume(SoundSource.MASTER); //?} else {
         /*var soundEngine = (dev.aika.clienttweaks.mixin.Accessor.SoundEngineAccessor)
                 Minecraft.getInstance().getSoundManager().soundEngine;
-        if (!soundEngine.isLoaded()) return;
+        if (!soundEngine.clienttweaks$isLoaded()) return;
 
-        soundEngine.getInstanceToChannel().forEach((instance, handle) -> {
+        soundEngine.clienttweaks$getInstanceToChannel().forEach((instance, handle) -> {
             if (instance.getSource() == SoundSource.MASTER) {
-                float volume = soundEngine.calculateVolume(instance);
+                float volume = soundEngine.clienttweaks$calculateVolume(instance);
                 handle.execute((channel) -> channel.setVolume(volume));
             }
         });*///?}
