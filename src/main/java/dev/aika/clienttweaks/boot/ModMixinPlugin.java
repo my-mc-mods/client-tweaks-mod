@@ -42,9 +42,7 @@ public class ModMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (!disabledMixins.contains(mixinClassName)) return true;
-        Constants.LOG.warn("Failed to apply mixin class {}", mixinClassName);
-        return false;
+        return !disabledMixins.contains(mixinClassName);
     }
 
     @Override

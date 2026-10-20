@@ -5,7 +5,6 @@ import dev.aika.clienttweaks.event.ClientEvents;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
-import net.minecraft.sounds.SoundSource;
 
 @UtilityClass
 public class Unfocused {
@@ -34,16 +33,14 @@ public class Unfocused {
     @SuppressWarnings("SameParameterValue")
     private void refreshMasterVolume() {
         //? if >=1.21.11 {
-        Minecraft.getInstance().getSoundManager().refreshCategoryVolume(SoundSource.MASTER); //?} else {
+        Minecraft.getInstance().getSoundManager().refreshCategoryVolume(net.minecraft.sounds.SoundSource.MASTER); //?} else {
         /*var soundEngine = (dev.aika.clienttweaks.mixin.Accessor.SoundEngineAccessor)
                 Minecraft.getInstance().getSoundManager().soundEngine;
         if (!soundEngine.clienttweaks$isLoaded()) return;
 
         soundEngine.clienttweaks$getInstanceToChannel().forEach((instance, handle) -> {
-            if (instance.getSource() == SoundSource.MASTER) {
-                float volume = soundEngine.clienttweaks$calculateVolume(instance);
-                handle.execute((channel) -> channel.setVolume(volume));
-            }
+            float volume = muted ? 0.0f : soundEngine.clienttweaks$calculateVolume(instance);
+            handle.execute((channel) -> channel.setVolume(volume));
         });*///?}
     }
 
