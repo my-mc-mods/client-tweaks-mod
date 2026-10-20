@@ -2,7 +2,6 @@ package dev.aika.clienttweaks;
 
 //? if neoforge {
 /*import dev.aika.clienttweaks.event.ClientEvents;
-import dev.aika.clienttweaks.feature.PingTracker;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -33,8 +32,7 @@ public final class ClientTweaksModNeoForge {
             /^if (initialized) return;
             initialized = true;
             ClientEvents.onClientStarted(); ^///?}
-
-            PingTracker.tick(Minecraft.getInstance());
+            ClientEvents.onEndClientTick(Minecraft.getInstance());
         }
     }
 }
