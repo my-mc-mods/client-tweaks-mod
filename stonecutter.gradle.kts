@@ -36,6 +36,7 @@ stonecutter parameters {
     swaps["minecraft"] = "\"${node.metadata.version}\";"
     constants["release"] = properties.get<String>("mod.id") != "template"
     constants["modmenu"] = properties.getOrNull<String>("deps.modmenu") != null
+    constants["cloth_config"] = properties.getOrNull<String>("deps.cloth_config") != null
     dependencies["fapi"] = properties.getOrNull<String>("deps.fabric_api") ?: "0"
 
     replacements {
@@ -48,6 +49,7 @@ stonecutter parameters {
         string(current.parsed >= "1.21.11") {
             replace("ResourceLocation", "Identifier")
             replace("import net.minecraft.Util;", "import net.minecraft.util.Util;")
+            replace("net.minecraft.Util.", "net.minecraft.util.Util.")
             replace("FMLLoader.isProduction()", "FMLLoader.getCurrent().isProduction()")
             replace("FMLLoader.getDist()", "FMLLoader.getCurrent().getDist()")
         }

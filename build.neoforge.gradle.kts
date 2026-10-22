@@ -6,11 +6,16 @@ plugins {
 }
 
 repositories {
+    strictMaven("https://maven.shedaniel.me/", "Cloth Config", "me.shedaniel.cloth")
 }
 
 dependencies {
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
+
+    findProperty("deps.cloth_config")?.let { version ->
+        api("me.shedaniel.cloth:cloth-config-neoforge:$version")
+    }
 }
 
 neoForge {

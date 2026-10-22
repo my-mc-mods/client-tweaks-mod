@@ -9,6 +9,7 @@ plugins {
 
 repositories {
     strictMaven("https://maven.terraformersmc.com/", "Terraformers", "com.terraformersmc")
+    strictMaven("https://maven.shedaniel.me/", "Cloth Config", "me.shedaniel.cloth")
 }
 
 dependencies {
@@ -20,8 +21,8 @@ dependencies {
     modImplementation(fabricApi.module("fabric-lifecycle-events-v1", fabricApiVersion))
 
     // modmenu
-    findProperty("deps.modmenu")?.let { modmenuVersion ->
-        val modmenu = "com.terraformersmc:modmenu:$modmenuVersion"
+    findProperty("deps.modmenu")?.let { version ->
+        val modmenu = "com.terraformersmc:modmenu:$version"
         modCompileOnly(modmenu)
         modLocalRuntime(modmenu)
         listOf(
@@ -30,6 +31,12 @@ dependencies {
             "fabric-screen-api-v1",
             if (sc.current.parsed >= "26.1") "fabric-key-mapping-api-v1" else "fabric-key-binding-api-v1"
         ).forEach { modLocalRuntime(fabricApi.module(it, fabricApiVersion)) }
+    }
+
+    findProperty("deps.cloth_config")?.let { version ->
+        modApi("me.shedaniel.cloth:cloth-config-fabric:$version") {
+            exclude(group = "net.fabricmc.fabric-api")
+        }
     }
 }
 
