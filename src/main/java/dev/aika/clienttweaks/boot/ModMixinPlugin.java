@@ -15,7 +15,8 @@ import java.util.function.BooleanSupplier;
 
 @SuppressWarnings("RedundantMethodOverride")
 public class ModMixinPlugin implements IMixinConfigPlugin {
-    Set<String> disabledMixins;
+    Set<String> disabledMixins = Sets.newHashSet();
+    public static Set<String> mixins = Sets.newHashSet();
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -24,8 +25,6 @@ public class ModMixinPlugin implements IMixinConfigPlugin {
             return;
         }
         ModConfig.load();
-
-        disabledMixins = ModConfig.get().disabledMixins();
 
         //? if <1.21.11
         //disabledMixins.add("dev.aika.clienttweaks.mixin.BetterLanguageFilter.LanguageSelectionListMixin");
@@ -42,7 +41,8 @@ public class ModMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return !disabledMixins.contains(mixinClassName);
+        mixins.add(mixinClassName);
+        return !disabledMixins.contains(mixinClassName) && !ModConfig.get().disabledMixins().contains(mixinClassName);
     }
 
     @Override

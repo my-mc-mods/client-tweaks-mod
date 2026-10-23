@@ -1,6 +1,6 @@
 package dev.aika.clienttweaks.util;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.nio.file.Path;
 
@@ -10,7 +10,7 @@ public sealed interface ModLoaderAccess {
 
     boolean isDevelopmentEnvironment();
 
-    @NotNull Path getConfigDir();
+    @NonNull Path getConfigDir();
 
     boolean isClient();
 
@@ -20,13 +20,16 @@ public sealed interface ModLoaderAccess {
         return net.minecraft.DetectedVersion.tryDetectVersion().name();
     }
 
-    ModLoaderAccess INSTANCE = /*? if fabric {*/new FabricLoaderAccess();
-     /*?} elif neoforge *///new NeoForgeLoaderAccess();
+    default boolean isClothConfigLoaded() {
+        return INSTANCE.isModLoaded(/*? if fabric {*/"cloth-config2"/*?} else {*//*"cloth_config"*//*?}*/);
+    }
+
+    ModLoaderAccess INSTANCE = /*? if fabric {*/new FabricLoaderAccess();/*?} elif neoforge *///new NeoForgeLoaderAccess();
 
     //? if fabric {
     final class FabricLoaderAccess implements ModLoaderAccess {
-        private final net.fabricmc.loader.api.FabricLoader loader =
-                net.fabricmc.loader.api.FabricLoader.getInstance();
+        private final net.fabricmc.loader.api.FabricLoader loader = net.fabricmc.loader.api.FabricLoader.getInstance();
+        private final net.fabricmc.api.EnvType envType = loader.getEnvironmentType();
 
         @Override public boolean isModLoaded(String id) {
             return loader.isModLoaded(id);
@@ -36,24 +39,21 @@ public sealed interface ModLoaderAccess {
             return loader.isDevelopmentEnvironment();
         }
 
-        @Override public @NotNull Path getConfigDir() {
+        @Override public @NonNull Path getConfigDir() {
             return loader.getConfigDir();
         }
 
         @Override public boolean isClient() {
-            return loader.getEnvironmentType() == net.fabricmc.api.EnvType.CLIENT;
+            return envType == net.fabricmc.api.EnvType.CLIENT;
         }
 
         @Override public boolean isServer() {
-            return loader.getEnvironmentType() == net.fabricmc.api.EnvType.SERVER;
+            return envType == net.fabricmc.api.EnvType.SERVER;
         }
     }
     //?} elif neoforge {
     /*final class NeoForgeLoaderAccess implements ModLoaderAccess {
-        private final net.neoforged.api.distmarker.Dist dist =
-                net.neoforged.fml.loading.FMLEnvironment.getDist();
-        private final net.neoforged.fml.loading.LoadingModList mods =
-                net.neoforged.fml.loading.FMLLoader.getCurrent().getLoadingModList();
+        private final net.neoforged.api.distmarker.Dist dist = net.neoforged.fml.loading.FMLEnvironment.getDist();
 
         @Override public boolean isModLoaded(String id) {
             return net.neoforged.fml.ModList.get().isLoaded(id);
@@ -63,7 +63,7 @@ public sealed interface ModLoaderAccess {
             return !net.neoforged.fml.loading.FMLLoader.getCurrent().isProduction();
         }
 
-        @Override public @NotNull Path getConfigDir() {
+        @Override public @NonNull Path getConfigDir() {
             return net.neoforged.fml.loading.FMLPaths.CONFIGDIR.get();
         }
 
