@@ -16,9 +16,9 @@ dependencies {
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
-    val fabricApiVersion: String = sc.properties["deps.fabric_api"]
-    modImplementation(fabricApi.module("fabric-rendering-v1", fabricApiVersion))
-    modImplementation(fabricApi.module("fabric-lifecycle-events-v1", fabricApiVersion))
+    val fabricApiModules = mutableSetOf<String>()
+    fabricApiModules.add("fabric-rendering-v1")
+    fabricApiModules.add("fabric-lifecycle-events-v1")
 
     // modmenu
     findProperty("deps.modmenu")?.let { version ->
@@ -26,11 +26,11 @@ dependencies {
         modCompileOnly(modmenu)
         modLocalRuntime(modmenu)
         listOf(
-            // "fabric-lifecycle-events-v1",
+            "fabric-lifecycle-events-v1",
             if (sc.current.parsed >= "1.21.9") "fabric-resource-loader-v1" else "fabric-resource-loader-v0",
             "fabric-screen-api-v1",
             if (sc.current.parsed >= "26.1") "fabric-key-mapping-api-v1" else "fabric-key-binding-api-v1"
-        ).forEach { modLocalRuntime(fabricApi.module(it, fabricApiVersion)) }
+        ).forEach { fabricApiModules.add(it) }
     }
 
     findProperty("deps.cloth_config")?.let { version ->
@@ -38,6 +38,9 @@ dependencies {
             exclude(group = "net.fabricmc.fabric-api")
         }
     }
+
+    val fabricApiVersion: String = sc.properties["deps.fabric_api"]
+    fabricApiModules.forEach { module -> modImplementation(fabricApi.module(module, fabricApiVersion)) }
 }
 
 dependencies {
@@ -45,10 +48,10 @@ dependencies {
         @Suppress("UnstableApiUsage")
         mappings(loom.layered {
             officialMojangMappings()
-            val parchmentMcVersion = findProperty("parchment.minecraft_version") ?: sc.current.parsed
-            val mappingsVersion = findProperty("parchment.mappings_version")
-            if (mappingsVersion != null)
-                parchment("org.parchmentmc.data:parchment-$parchmentMcVersion:$mappingsVersion@zip")
+            findProperty("parchment.mappings_version")?.let { version ->
+                val mcVersion = findProperty("parchment.minecraft_version") ?: sc.current.parsed
+                parchment("org.parchmentmc.data:parchment-$mcVersion:$version@zip")
+            }
         })
     }
 }
@@ -64,6 +67,7 @@ loom {
 
     runConfigs.maybeCreate("client").apply {
         runDirectory = rootProject.file("runs/client")
+        programArguments.addAll("--username", "Dev")
     }
     runConfigs.maybeCreate("server").apply {
         runDirectory = rootProject.file("runs/server/${sc.current.version}")
