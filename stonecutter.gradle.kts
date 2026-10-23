@@ -52,6 +52,9 @@ stonecutter parameters {
             replace("net.minecraft.Util.", "net.minecraft.util.Util.")
             replace("FMLLoader.isProduction()", "FMLLoader.getCurrent().isProduction()")
             replace("FMLLoader.getDist()", "FMLLoader.getCurrent().getDist()")
+            replace("org.jetbrains.annotations.Nullable", "org.jspecify.annotations.Nullable")
+            replace("org.jetbrains.annotations.NotNull", "org.jspecify.annotations.NonNull")
+            replace("@NotNull", "@NonNull")
         }
 
         string(current.parsed >= "26.1") {
