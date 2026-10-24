@@ -13,6 +13,7 @@ dependencies {
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
+    // Cloth Config API
     findProperty("deps.cloth_config")?.let { version ->
         api("me.shedaniel.cloth:cloth-config-neoforge:$version")
     }

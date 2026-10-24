@@ -1,0 +1,94 @@
+#file: noinspection SpellCheckingInspection
+mod:
+  id: "gizmoclienttweaks"
+  name: "Gizmo's Client Tweaks"
+  group: "dev.aika.clienttweaks"
+  version: "0.1.0"
+  license: "MIT" # https://spdx.org/licenses/
+  authors: [ "Gizmo" ]
+  contributors: [ ]
+  description: |-
+    Gizmo's Client Tweaks
+  contact:
+    homepage: "https://github.com/my-mc-mods/client-tweaks-mod"
+    sources: "https://github.com/my-mc-mods/client-tweaks-mod"
+    issues: "https://github.com/my-mc-mods/client-tweaks-mod/issues"
+
+# https://fabricmc.net/develop/
+deps.fabric_loader: "0.20.1"
+loomx.loom_version: "1.18.2"
+
+"1.21.1":
+  mod.mc_releases: [ "1.21", "1.21.1" ]
+  parchment: # https://parchmentmc.org/docs/getting-started.html
+    minecraft_version: "1.21.1"
+    mappings_version: "2024.11.17"
+  deps.cloth_config: "15.0.140" # https://linkie.shedaniel.dev/dependencies
+"1.21.11":
+  mod.mc_releases: [ "1.21.11" ]
+  parchment:
+    minecraft_version: "1.21.11"
+    mappings_version: "2025.12.20"
+  deps.cloth_config: "21.11.153"
+"26.1.x":
+  mod.mc_releases: [ "26.1", "26.1.1", "26.1.2" ]
+  deps.cloth_config: "26.1.154"
+"26.2":
+  mod.mc_releases: [ "26.2" ]
+  deps.cloth_config: "26.2.155"
+"26.3":
+  mod.mc_releases: [ "26.3" ]
+  deps.cloth_config: "26.3.158"
+"26.4":
+  mod.mc_releases: [ "26.4" ]
+
+
+fabric:
+  "1.21.1":
+    mod.mc_compat: ">1.21- <=1.21.2" # https://dexman545.github.io/outlet-database/floaderValidator
+    deps:
+      fabric_api: "0.116.17+1.21.1" # https://fabricmc.net/develop/
+      modmenu: "11.0.5" # https://modrinth.com/mod/modmenu/versions
+  "1.21.11":
+    mod.mc_compat: ">1.21.11- <26"
+    deps:
+      fabric_api: "0.141.6+1.21.11"
+      modmenu: "17.0.1"
+  "26.1.x":
+    mod.mc_compat: "~26.1-"
+    deps:
+      fabric_api: "0.155.3+26.1.2"
+      modmenu: "18.0.0"
+  "26.2":
+    mod.mc_compat: "~26.2-"
+    deps:
+      fabric_api: "0.161.0+26.2"
+      modmenu: "20.0.2"
+  "26.3":
+    mod.mc_compat: "~26.3-"
+    deps:
+      fabric_api: "0.164.0+26.3"
+      modmenu: "21.0.0-beta.1"
+  "26.4":
+    mod.mc_compat: "~26.4-"
+    deps:
+      fabric_api: "0.164.0+26.4"
+      modmenu: "22.0.0-alpha.2"
+
+
+neoforge:
+  "1.21.1":
+    mod.mc_compat: "[1.21.1]" # https://maven.apache.org/enforcer/enforcer-rules/versionRanges.html
+    deps.neoforge: "21.1.264" # https://projects.neoforged.net/neoforged/neoforge
+  "1.21.11":
+    mod.mc_compat: "[1.21.11]"
+    deps.neoforge: "21.11.48"
+  "26.1.x":
+    mod.mc_compat: "[26.1, 26.2)"
+    deps.neoforge: "26.1.2.122"
+  "26.2":
+    mod.mc_compat: "[26.2, 26.3)"
+    deps.neoforge: "26.2.0.93"
+  "26.3":
+    mod.mc_compat: "[26.3, 26.4)"
+    deps.neoforge: "26.3.0.95"

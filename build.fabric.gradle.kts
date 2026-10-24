@@ -1,7 +1,5 @@
 @file:Suppress("AvoidDuplicateDependencies")
 
-import org.gradle.kotlin.dsl.register
-
 plugins {
     id("dev.kikugie.loom-back-compat")
     id("mmm.fabric-convention")
@@ -20,7 +18,7 @@ dependencies {
     fabricApiModules.add("fabric-rendering-v1")
     fabricApiModules.add("fabric-lifecycle-events-v1")
 
-    // modmenu
+    // Mod Menu
     findProperty("deps.modmenu")?.let { version ->
         val modmenu = "com.terraformersmc:modmenu:$version"
         modCompileOnly(modmenu)
@@ -33,6 +31,7 @@ dependencies {
         ).forEach { fabricApiModules.add(it) }
     }
 
+    // Cloth Config API
     findProperty("deps.cloth_config")?.let { version ->
         modApi("me.shedaniel.cloth:cloth-config-fabric:$version") {
             exclude(group = "net.fabricmc.fabric-api")
