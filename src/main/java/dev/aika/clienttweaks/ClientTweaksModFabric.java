@@ -10,6 +10,7 @@ public final class ClientTweaksModFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         ClientTweaksMod.init();
+
         ClientLifecycleEvents.CLIENT_STARTED.register(ClientEvents::onClientStarted);
         ClientTickEvents.END_CLIENT_TICK.register(ClientEvents::onEndClientTick);
     }

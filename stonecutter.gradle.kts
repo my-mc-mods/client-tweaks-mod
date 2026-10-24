@@ -59,10 +59,13 @@ stonecutter parameters {
 
         string(current.parsed >= "26.1") {
             replace("classTweaker v2 named", "classTweaker v2 official")
+            replace("net.minecraft.client.gui.GuiGraphics", "net.minecraft.client.gui.GuiGraphicsExtractor")
+            replace("graphics.drawString(", "graphics.text(")
         }
 
         string(current.parsed >= "26.2") {
             replace("minecraft.setScreen(", "minecraft.gui.setScreen(")
+            replace("Minecraft.getInstance().setScreen(", "Minecraft.getInstance().gui.setScreen(")
             replace("minecraft.getToastManager()", "minecraft.gui.toastManager()")
         }
     }

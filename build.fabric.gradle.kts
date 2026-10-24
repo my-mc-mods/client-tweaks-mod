@@ -78,8 +78,6 @@ loom {
     }
 
     mods { create("mod.id"()) { sourceSet(sourceSets.main.get()) } }
-
-    runConfigs.remove(runConfigs.getByName("server"))
 }
 
 tasks {

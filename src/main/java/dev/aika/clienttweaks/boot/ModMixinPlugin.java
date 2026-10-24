@@ -15,7 +15,7 @@ import java.util.function.BooleanSupplier;
 
 @SuppressWarnings("RedundantMethodOverride")
 public class ModMixinPlugin implements IMixinConfigPlugin {
-    Set<String> disabledMixins = Sets.newHashSet();
+    public static Set<String> disabledMixins = Sets.newHashSet();
     public static Set<String> mixins = Sets.newHashSet();
 
     @Override

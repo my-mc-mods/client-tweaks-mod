@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 import java.awt.*;
 
 @UtilityClass
+@SuppressWarnings("unused")
 public class ColorUtil {
     public int toRgb(Color color) {
         return color.getRGB() & 0xFFFFFF;
