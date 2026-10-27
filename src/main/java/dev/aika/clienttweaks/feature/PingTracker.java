@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @UtilityClass
 public class PingTracker {
-    @Setter
     private long INTERVAL_MS = TimeUnit.SECONDS.toMillis(1);
     private final long TIMEOUT_MS = TimeUnit.SECONDS.toMillis(5);
 
@@ -79,5 +78,9 @@ public class PingTracker {
     }
 
     private record PendingPing(long token, long sentAtMs) {
+    }
+
+    public static void setInterval(int value) {
+        INTERVAL_MS = TimeUnit.SECONDS.toMillis(value);
     }
 }

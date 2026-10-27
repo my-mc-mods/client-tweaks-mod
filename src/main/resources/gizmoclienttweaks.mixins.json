@@ -11,7 +11,11 @@
   "client": [
     "Accessor.SoundEngineAccessor",
     "BetterLanguageFilter.LanguageSelectionListMixin",
+    "ClothConfigFix.TooltipListEntryMixin",
     "HideUnsecureWarningToast.ToastManagerMixin",
+    "NumericPing.PlayerTabOverlayMixin",
+    "PingTracker.ClientPacketListenerMixin",
+    "PingTracker.PlayerInfoMixin",
     "RemoveRealmsButton.TitleScreenMixin",
     "SmartFireOverlay.ScreenEffectRendererMixin",
     "Unfocused.SoundEngineMixin",
