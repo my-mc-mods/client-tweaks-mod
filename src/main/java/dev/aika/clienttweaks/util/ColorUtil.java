@@ -38,4 +38,8 @@ public class ColorUtil {
                 alpha
         );
     }
+
+    public Color fromArgb(int argb) {
+        return new Color((argb >> 16) & 0xFF, (argb >> 8) & 0xFF, argb & 0xFF, (argb >> 24) & 0xFF);
+    }
 }
