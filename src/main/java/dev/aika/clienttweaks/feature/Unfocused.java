@@ -14,13 +14,13 @@ public class Unfocused {
     public void onWindowFocusChanged(boolean focused) {
         if (!ClientEvents.isInitialized()) return;
 
-        final var conf = ModConfig.get().unfocused();
         final var mc = Minecraft.getInstance();
 
-        if (conf.framerateLimit() > 0) {
-            setFramerateLimit(focused ? mc.options.framerateLimit().get() : conf.framerateLimit());
+        final int unfocusedFpsLimit = ModConfig.get().unfocusedFpsLimit();
+        if (unfocusedFpsLimit > 0) {
+            setFramerateLimit(focused ? mc.options.framerateLimit().get() : unfocusedFpsLimit);
         }
-        if (conf.mute()) setMuted(!focused);
+        if (ModConfig.get().unfocusedMute()) setMuted(!focused);
     }
 
     private void setMuted(boolean value) {
