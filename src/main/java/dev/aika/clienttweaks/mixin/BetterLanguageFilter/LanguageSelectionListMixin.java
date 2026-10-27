@@ -1,8 +1,8 @@
 package dev.aika.clienttweaks.mixin.BetterLanguageFilter;
 
+//? if >=1.21.11 {
 import org.spongepowered.asm.mixin.Mixin;
 
-//? if >=1.21.11 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.aika.clienttweaks.boot.ModConfig;
@@ -13,10 +13,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-//?}
 
 @Mixin(net.minecraft.client.gui.screens.options.LanguageSelectScreen.LanguageSelectionList.class)
-public abstract class LanguageSelectionListMixin { //? if >=1.21.11 {
+public abstract class LanguageSelectionListMixin {
     @WrapOperation(method = "filterEntries",
             at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;filter(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;"))
     private Stream<Map.Entry<String, LanguageInfo>> modifyFilter(
@@ -34,5 +33,10 @@ public abstract class LanguageSelectionListMixin { //? if >=1.21.11 {
                         || entry.getValue().region().toLowerCase(Locale.ROOT).contains(f)
                         || entry.getKey().toLowerCase(Locale.ROOT).contains(f)
                         || entry.getKey().replace("_", "").toLowerCase(Locale.ROOT).contains(f));
-    }//?}
+    }
 }
+//?} else {
+/*@org.spongepowered.asm.mixin.Mixin(net.minecraft.client.Minecraft.class)
+public abstract class LanguageSelectionListMixin {
+}
+*///?}

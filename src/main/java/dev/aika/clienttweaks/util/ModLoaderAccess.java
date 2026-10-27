@@ -54,9 +54,11 @@ public sealed interface ModLoaderAccess {
     //?} elif neoforge {
     /*final class NeoForgeLoaderAccess implements ModLoaderAccess {
         private final net.neoforged.api.distmarker.Dist dist = net.neoforged.fml.loading.FMLEnvironment.getDist();
+        private final net.neoforged.fml.loading.LoadingModList mods =
+                net.neoforged.fml.loading.FMLLoader.getCurrent().getLoadingModList();
 
         @Override public boolean isModLoaded(String id) {
-            return net.neoforged.fml.ModList.get().isLoaded(id);
+            return mods.getModFileById(id) != null;
         }
 
         @Override public boolean isDevelopmentEnvironment() {
