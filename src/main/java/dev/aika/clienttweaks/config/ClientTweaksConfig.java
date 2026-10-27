@@ -22,6 +22,7 @@ public class ClientTweaksConfig {
     private boolean hideUnsecureWarningToast = isDevEnv;
     private boolean unfocusedMute = isDevEnv;
     private int unfocusedFpsLimit = 10;
+    private int clientPingInterval = 0;
 
     private NumericPingConfig numericPing = new NumericPingConfig();
 

@@ -1,5 +1,6 @@
 package dev.aika.clienttweaks.feature;
 
+import dev.aika.clienttweaks.boot.ModConfig;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
@@ -8,28 +9,27 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.ping.ServerboundPingRequestPacket;
 import net.minecraft.util.Util;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 @UtilityClass
 public class PingTracker {
-    private final long INTERVAL_MS =
-            TimeUnit.SECONDS.toMillis(1);
+    @Setter
+    private long INTERVAL_MS = TimeUnit.SECONDS.toMillis(1);
+    private final long TIMEOUT_MS = TimeUnit.SECONDS.toMillis(5);
 
-    private final long TIMEOUT_MS =
-            TimeUnit.SECONDS.toMillis(5);
-
-    private final AtomicLong SEQUENCE = new AtomicLong();
-    private final AtomicReference<PendingPing> PENDING =
-            new AtomicReference<>();
+    private final AtomicReference<PendingPing> PENDING = new AtomicReference<>();
 
     @Setter @Getter
-    private long latencyMs = -1;
+    private volatile long latencyMs = -1;
     private long nextPingAt;
     private boolean scheduled;
 
     public void tick(Minecraft minecraft) {
+        final int clientPingInterval = ModConfig.get().clientPingInterval();
+        if (clientPingInterval <= 0 || clientPingInterval >= 30) return;
+
         ClientPacketListener listener = minecraft.getConnection();
 
         if (listener == null || !listener.getConnection().isConnected()) {
@@ -38,7 +38,7 @@ public class PingTracker {
             return;
         }
 
-        long now = Util.getMillis();
+        final long now = Util.getMillis();
         PendingPing pending = PENDING.get();
 
         if (pending != null) {
@@ -54,7 +54,7 @@ public class PingTracker {
 
         if (scheduled && now - nextPingAt < 0) return;
 
-        long token = SEQUENCE.incrementAndGet();
+        final long token = ThreadLocalRandom.current().nextLong();
         PendingPing request = new PendingPing(token, now);
 
         if (!PENDING.compareAndSet(null, request)) return;
