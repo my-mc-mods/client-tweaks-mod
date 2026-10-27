@@ -1,7 +1,7 @@
 license = "generated at build time"
 
-modLoader="javafml"
-loaderVersion="[1,)"
+modLoader = "javafml"
+loaderVersion = "[1,)"
 
 [[mods]]
 modId = "generated-at-build-time"
@@ -23,6 +23,14 @@ type = "required"
 versionRange = "${minecraft_compat}"
 ordering = "NONE"
 side = "CLIENT"
+
+[[dependencies.generated-at-build-time]]
+modId = "cloth_config"
+type = "optional"
+versionRange = "*"
+ordering = "NONE"
+side = "CLIENT"
+referralUrl = "https://www.curseforge.com/minecraft/mc-mods/cloth-config"
 
 [[mixins]]
 config = "gizmoclienttweaks.mixins.json"

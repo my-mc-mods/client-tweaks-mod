@@ -26,5 +26,8 @@
     "fabric-rendering-v1": "*",
     "fabric-lifecycle-events-v1": "*"
   },
+  "suggests": {
+    "cloth-config2": "*"
+  },
   "accessWidener": "gizmoclienttweaks.ct"
 }

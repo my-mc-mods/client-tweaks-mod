@@ -1,7 +1,7 @@
 package dev.aika.clienttweaks;
 
 //? if neoforge {
-/*import dev.aika.clienttweaks.boot.ModConfig;
+/*import dev.aika.clienttweaks.compat.ClothConfigIntegration;
 import dev.aika.clienttweaks.event.ClientEvents;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -16,11 +16,9 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 public final class ClientTweaksModNeoForge {
     public ClientTweaksModNeoForge(ModContainer container) {
         ClientTweaksMod.init();
+
         container.registerExtensionPoint(IConfigScreenFactory.class,
-                (ignoreContainer, parent) -> {
-                    ModConfig.load();
-                    return parent;
-                }
+                (ignoreContainer, parent) -> ClothConfigIntegration.getConfigScreen(parent)
         );
     }
 
