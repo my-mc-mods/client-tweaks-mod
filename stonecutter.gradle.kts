@@ -68,6 +68,12 @@ stonecutter parameters {
             replace("Minecraft.getInstance().setScreen(", "Minecraft.getInstance().gui.setScreen(")
             replace("minecraft.getToastManager()", "minecraft.gui.toastManager()")
         }
+        string(current.parsed > "26.3") {
+            replace(
+                "net.minecraft.client.renderer.RenderPipelines",
+                "net.minecraft.client.renderer.pipeline.RenderPipelines"
+            )
+        }
     }
 }
 
