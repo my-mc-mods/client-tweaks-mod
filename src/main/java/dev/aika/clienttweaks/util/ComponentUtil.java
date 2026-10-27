@@ -16,4 +16,10 @@ public class ComponentUtil {
         if (language.has(fallbackKey)) return Component.translatable(fallbackKey, args);
         return Component.literal(key);
     }
+
+    public Component optionStatus(final boolean value) {
+        return value
+                ? Component.translatable("options.on").withColor(0x55FF55)
+                : Component.translatable("options.off").withColor(0xFF5555);
+    }
 }
