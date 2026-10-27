@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 
-@SuppressWarnings("RedundantMethodOverride")
+@SuppressWarnings({"RedundantMethodOverride", "SameParameterValue", "unused"})
 public class ModMixinPlugin implements IMixinConfigPlugin {
     public static Set<String> disabledMixins = Sets.newHashSet();
     public static Set<String> mixins = Sets.newHashSet();
@@ -27,18 +27,32 @@ public class ModMixinPlugin implements IMixinConfigPlugin {
         ModConfig.load();
 
         //? if <1.21.11
-        //disabledMixins.add("dev.aika.clienttweaks.mixin.BetterLanguageFilter.LanguageSelectionListMixin");
+        //disableMixin("dev.aika.clienttweaks.mixin.BetterLanguageFilter.LanguageSelectionListMixin");
 
-        disableMixinIf("dev.aika.clienttweaks.mixin.ClothConfigFix.TooltipListEntryMixin",
-                () -> !ModLoaderAccess.INSTANCE.isClothConfigLoaded());
-        disableMixinIf("dev.aika.clienttweaks.mixin.RemoveRealmsButton.TitleScreenMixin",
-                () -> !ModConfig.get().removeRealmsButton());
+        disableUnless(ModConfig.get()::removeRealmsButton,
+                "dev.aika.clienttweaks.mixin.RemoveRealmsButton.TitleScreenMixin");
+
+        disableUnless(ModLoaderAccess.INSTANCE::isClothConfigLoaded,
+                //? if >=26 {
+                "dev.aika.clienttweaks.mixin.ClothConfigFix.DynamicElementListWidget_ElementEntryMixin",
+                "dev.aika.clienttweaks.mixin.ClothConfigFix.MultiElementListEntry_CategoryLabelWidgetMixin", //?}
+                "dev.aika.clienttweaks.mixin.ClothConfigFix.TooltipListEntryMixin");
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private void disableMixinIf(@Language(value = "JAVA", suffix = ".class") String mixinClassName,
-                                BooleanSupplier condition) {
-        if (condition.getAsBoolean()) disabledMixins.add(mixinClassName);
+    private void disableIf(BooleanSupplier condition, @Language(value = "JAVA", suffix = ".class") String... mixinClassNames) {
+        for (@Language(value = "JAVA", suffix = ".class") String mixinClassName : mixinClassNames) {
+            if (condition.getAsBoolean()) disableMixin(mixinClassName);
+        }
+    }
+
+    private void disableUnless(BooleanSupplier condition, @Language(value = "JAVA", suffix = ".class") String... mixinClassNames) {
+        for (@Language(value = "JAVA", suffix = ".class") String mixinClassName : mixinClassNames) {
+            if (!condition.getAsBoolean()) disableMixin(mixinClassName);
+        }
+    }
+
+    private void disableMixin(@Language(value = "JAVA", suffix = ".class") String mixinClassName) {
+        disabledMixins.add(mixinClassName);
     }
 
     @Override

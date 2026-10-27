@@ -11,6 +11,8 @@
   "client": [
     "Accessor.SoundEngineAccessor",
     "BetterLanguageFilter.LanguageSelectionListMixin",
+    "ClothConfigFix.DynamicElementListWidget_ElementEntryMixin",
+    "ClothConfigFix.MultiElementListEntry_CategoryLabelWidgetMixin",
     "ClothConfigFix.TooltipListEntryMixin",
     "HideUnsecureWarningToast.ToastManagerMixin",
     "NumericPing.PlayerTabOverlayMixin",
