@@ -52,6 +52,13 @@ tasks {
 
         filesMatching("*.mixins.json") { expand("java" to "JAVA_${requiredJava.majorVersion}") }
     }
+
+    // https://github.com/projectlombok/lombok/issues/3852#issuecomment-3408877430
+    if ((requiredJava.toClassVersion() - 44) >= 24) {
+        withType<JavaCompile>().configureEach {
+            options.forkOptions.jvmArgs?.add("--sun-misc-unsafe-memory-access=allow")
+        }
+    }
 }
 
 publishing {
