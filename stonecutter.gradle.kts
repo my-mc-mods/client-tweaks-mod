@@ -21,8 +21,6 @@ allprojects {
     }
 
     tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>().configureEach {
-        // semver4j
-        relocate("org.semver4j", "${"mod.group"()}.shadowed.semver4j")
     }
 }
 

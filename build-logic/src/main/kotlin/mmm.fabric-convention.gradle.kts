@@ -1,5 +1,7 @@
 @file:Suppress("AvoidDuplicateDependencies")
 
+import tools.jackson.databind.node.ObjectNode
+
 plugins {
     id("mmm.platform-convention")
 }
@@ -33,7 +35,7 @@ val generateModMetadataFile = tasks.register("generateModMetadataFile") {
     outputFile.parentFile.mkdirs()
 
     val mapper = tools.jackson.databind.ObjectMapper()
-    val json = mapper.readTree(inputFile.reader()) as tools.jackson.databind.node.ObjectNode
+    val json = mapper.readTree(inputFile.reader()) as ObjectNode
     json.let {
         it.put("id", "mod.id"())
         it.put("name", "mod.name"())
@@ -47,6 +49,9 @@ val generateModMetadataFile = tasks.register("generateModMetadataFile") {
             ?.let { v -> it.set("contact", mapper.readTree(v.toJson().toString())) }
         sc(project).properties.rawOrNull("mod", "contributors")
             ?.let { v -> if (v.asList().isNotEmpty()) it.set("contributors", mapper.readTree(v.toJson().toString())) }
+        sc(project).constants["modmenu"]?.let { v ->
+            if (!v) (it.get("entrypoints") as ObjectNode).remove("modmenu")
+        }
     }
 
     outputFile.writer().use {

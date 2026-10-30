@@ -1,6 +1,6 @@
 package dev.aika.clienttweaks.compat;
 
-//? if fabric {
+//? if fabric && modmenu {
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 
