@@ -18,9 +18,12 @@ import me.shedaniel.clothconfig2.gui.AbstractConfigScreen;
 import me.shedaniel.clothconfig2.gui.entries.MultiElementListEntry;
 import me.shedaniel.clothconfig2.gui.entries.NestedListListEntry;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,28 +49,32 @@ public class ModClothConfigScreen {
                         Component.translatable("config.gizmoclienttweaks.remove_realms_button"),
                         conf.removeRealmsButton())
                 .requireRestart()
-                .setTooltip(Component.translatable("config.gizmoclienttweaks.remove_realms_button.@tooltip"))
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.remove_realms_button.@tooltip")))
                 .setSaveConsumer(conf::removeRealmsButton)
                 .setDefaultValue(defaultConfig.isDevEnv())
                 .build());
         general.addEntry(eb.startBooleanToggle(
                         Component.translatable("config.gizmoclienttweaks.better_language_filter"),
                         conf.betterLanguageFilter())
-                .setTooltip(Component.translatable("config.gizmoclienttweaks.better_language_filter.@tooltip"))
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.better_language_filter.@tooltip")))
                 .setSaveConsumer(conf::betterLanguageFilter)
                 .setDefaultValue(defaultConfig.betterLanguageFilter())
                 .build());
         general.addEntry(eb.startBooleanToggle(
                         Component.translatable("config.gizmoclienttweaks.smart_fire_overlay"),
                         conf.smartFireOverlay())
-                .setTooltip(Component.translatable("config.gizmoclienttweaks.smart_fire_overlay.@tooltip"))
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.smart_fire_overlay.@tooltip")))
                 .setSaveConsumer(conf::smartFireOverlay)
                 .setDefaultValue(defaultConfig.smartFireOverlay())
                 .build());
         general.addEntry(eb.startBooleanToggle(
                         Component.translatable("config.gizmoclienttweaks.hide_unsecure_warning_toast"),
                         conf.hideUnsecureWarningToast())
-                .setTooltip(Component.translatable("config.gizmoclienttweaks.hide_unsecure_warning_toast.@tooltip"))
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.hide_unsecure_warning_toast.@tooltip")))
                 .setSaveConsumer(conf::hideUnsecureWarningToast)
                 .setDefaultValue(defaultConfig.hideUnsecureWarningToast())
                 .build());
@@ -76,17 +83,19 @@ public class ModClothConfigScreen {
                         conf.unfocusedFpsLimit(),
                         -1, 260
                 )
-                .setTooltip(Component.translatable("config.gizmoclienttweaks.unfocused_fps_limit.@tooltip"))
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.unfocused_fps_limit.@tooltip")))
                 .setSaveConsumer(conf::unfocusedFpsLimit)
                 .setDefaultValue(defaultConfig::unfocusedFpsLimit)
                 .setTextGetter(value -> value < 1
                         ? Component.translatable("config.gizmoclienttweaks.@disabled")
-                        : Component.translatable("config.gizmoclienttweaks.unfocused_fps_limit.@fps", value))
+                        : Component.translatable("config.gizmoclienttweaks.@slider.fps", value))
                 .build());
         general.addEntry(eb.startBooleanToggle(
                         Component.translatable("config.gizmoclienttweaks.unfocused_mute"),
                         conf.unfocusedMute())
-                .setTooltip(Component.translatable("config.gizmoclienttweaks.unfocused_mute.@tooltip"))
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.unfocused_mute.@tooltip")))
                 .setSaveConsumer(conf::unfocusedMute)
                 .setDefaultValue(defaultConfig::unfocusedMute)
                 .build());
@@ -95,7 +104,8 @@ public class ModClothConfigScreen {
                         conf.clientPingInterval(),
                         -1, 30
                 )
-                .setTooltip(Component.translatable("config.gizmoclienttweaks.client_ping_interval.@tooltip"))
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.client_ping_interval.@tooltip")))
                 .setSaveConsumer(value -> {
                     conf.clientPingInterval(value);
                     PingTracker.setInterval(value);
@@ -103,25 +113,28 @@ public class ModClothConfigScreen {
                 .setDefaultValue(defaultConfig::clientPingInterval)
                 .setTextGetter(value -> value < 1 || value >= 30
                         ? Component.translatable("config.gizmoclienttweaks.@disabled")
-                        : Component.translatable("config.gizmoclienttweaks.client_ping_interval.@second", value))
+                        : Component.translatable("config.gizmoclienttweaks.@slider.seconds", value))
                 .build());
 
         final var numericPing = eb.startSubCategory(
                         Component.translatable("config.gizmoclienttweaks.numeric_ping.@category"))
-                .setTooltip(Component.translatable("config.gizmoclienttweaks.numeric_ping.@tooltip"))
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.numeric_ping.@tooltip")))
                 .setExpanded(true);
         final var numericPingConfig = conf.numericPing();
         numericPing.addLast(eb.startBooleanToggle(
                         Component.translatable("config.gizmoclienttweaks.numeric_ping.enabled"),
                         numericPingConfig.enabled())
-                .setTooltip(Component.translatable("config.gizmoclienttweaks.numeric_ping.enabled.@tooltip"))
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.numeric_ping.enabled.@tooltip")))
                 .setSaveConsumer(numericPingConfig::enabled)
                 .setDefaultValue(defaultConfig.numericPing()::enabled)
                 .build());
         numericPing.addLast(eb.startBooleanToggle(
                         Component.translatable("config.gizmoclienttweaks.numeric_ping.show_ping_icon"),
                         numericPingConfig.showPingIcon())
-                .setTooltip(Component.translatable("config.gizmoclienttweaks.numeric_ping.show_ping_icon.@tooltip"))
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.numeric_ping.show_ping_icon.@tooltip")))
                 .setSaveConsumer(numericPingConfig::showPingIcon)
                 .setDefaultValue(defaultConfig.numericPing()::showPingIcon)
                 .build());
@@ -130,7 +143,8 @@ public class ModClothConfigScreen {
                         numericPingConfig.slotPaddingLeft(),
                         0, 260
                 )
-                .setTooltip(Component.translatable("config.gizmoclienttweaks.numeric_ping.slot_padding_left.@tooltip"))
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.numeric_ping.slot_padding_left.@tooltip")))
                 .setSaveConsumer(numericPingConfig::slotPaddingLeft)
                 .setDefaultValue(defaultConfig.numericPing()::slotPaddingLeft)
                 .build());
@@ -144,7 +158,7 @@ public class ModClothConfigScreen {
                 Optional::empty,
                 numericPingConfig::rules, defaultConfig.numericPing()::rules,
                 eb.getResetButtonKey(),
-                true, false,
+                true, true,
                 (elem, ignore) -> {
                     if (elem == null) {
                         var newRule = new ClientTweaksConfig.NumericPingConfig.Rule("*", Color.GRAY);
@@ -153,6 +167,8 @@ public class ModClothConfigScreen {
                     return createRuleListEntry(eb, elem);
                 }
         );
+        rulesEntry.setTooltipSupplier(() ->
+                maybeTooltip(Component.translatable("config.gizmoclienttweaks.numeric_ping.rules.@tooltip")));
         numericPing.addLast(rulesEntry);
 
         general.addEntry(numericPing.build());
@@ -170,12 +186,18 @@ public class ModClothConfigScreen {
         return new MultiElementListEntry<>(
                 Component.translatable("config.gizmoclienttweaks.numeric_ping.rules.rule"), rule,
                 Lists.newArrayList(
-                        eb.startStrField(Component.translatable("config.gizmoclienttweaks.numeric_ping.rules.rule"),
+                        eb.startStrField(
+                                        Component.translatable("config.gizmoclienttweaks.numeric_ping.rules.rule.range"),
                                         rule.range().toString())
                                 .setSaveConsumer(value -> rule.range(NumberExpression.parse(value)))
+                                .setTooltip(maybeTooltip(
+                                        Component.translatable("config.gizmoclienttweaks.numeric_ping.rules.rule.range.@tooltip")))
                                 .build(),
-                        eb.startColorField(Component.translatable("config.gizmoclienttweaks.numeric_ping.rules.color"),
+                        eb.startColorField(
+                                        Component.translatable("config.gizmoclienttweaks.numeric_ping.rules.rule.color"),
                                         ColorUtil.toArgb(rule.color()))
+                                .setTooltip(maybeTooltip(
+                                        Component.translatable("config.gizmoclienttweaks.numeric_ping.rules.rule.color.@tooltip")))
                                 .setAlphaMode(true)
                                 .setSaveConsumer(value -> rule.color(ColorUtil.fromArgb(value)))
                                 .build()
@@ -206,6 +228,15 @@ public class ModClothConfigScreen {
                     else ModConfig.get().disabledMixins().add(mixin);
                 })
                 .build()));
+    }
+
+    private static Optional<Component[]> maybeTooltip(Component... tooltip) {
+        final Component[] arr = Arrays.stream(tooltip).filter(component -> {
+            if (component.getContents() instanceof TranslatableContents contents)
+                return Language.getInstance().has(contents.getKey());
+            return true;
+        }).toArray(Component[]::new);
+        return arr.length < 1 ? Optional.empty() : Optional.of(arr);
     }
 }
 //?}
