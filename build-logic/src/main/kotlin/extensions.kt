@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 import dev.kikugie.stonecutter.build.StonecutterBuildExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
