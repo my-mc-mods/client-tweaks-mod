@@ -16,7 +16,8 @@ mod:
 
 # https://fabricmc.net/develop/
 deps.fabric_loader: "0.20.1"
-loomx.loom_version: "1.18.2"
+# https://maven.fabricmc.net/net/fabricmc/fabric-loom/net.fabricmc.fabric-loom.gradle.plugin/maven-metadata.xml
+loomx.loom_version: "1.19.3"
 
 "1.21.1":
   mod.mc_releases: [ "1.21", "1.21.1" ]
@@ -72,8 +73,8 @@ fabric:
   "26.4":
     mod.mc_compat: "~26.4-"
     deps:
-      fabric_api: "0.165.0+26.4"
-      modmenu: "22.0.0-alpha.2"
+      fabric_api: "0.165.4+26.4"
+      modmenu: "22.0.0-alpha.3"
 
 
 neoforge:
