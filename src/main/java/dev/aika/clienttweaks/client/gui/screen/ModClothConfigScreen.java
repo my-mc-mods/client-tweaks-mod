@@ -25,6 +25,7 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class ModClothConfigScreen {
@@ -159,13 +160,9 @@ public class ModClothConfigScreen {
                 numericPingConfig::rules, defaultConfig.numericPing()::rules,
                 eb.getResetButtonKey(),
                 true, true,
-                (elem, ignore) -> {
-                    if (elem == null) {
-                        var newRule = new ClientTweaksConfig.NumericPingConfig.Rule("*", Color.GRAY);
-                        return createRuleListEntry(eb, newRule);
-                    }
-                    return createRuleListEntry(eb, elem);
-                }
+                (elem, ignore)
+                        -> createRuleListEntry(eb, Objects.requireNonNullElseGet(elem,
+                        () -> new ClientTweaksConfig.NumericPingConfig.Rule("*", Color.GRAY)))
         );
         rulesEntry.setTooltipSupplier(() ->
                 maybeTooltip(Component.translatable("config.gizmoclienttweaks.numeric_ping.rules.@tooltip")));
