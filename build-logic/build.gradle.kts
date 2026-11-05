@@ -14,8 +14,8 @@ repositories {
 val rootProperties = Properties().apply { file("../gradle.properties").inputStream().use(::load) }
 
 dependencies {
-    implementation("tools.jackson.core:jackson-core:3.2.3")
-    implementation("tools.jackson.core:jackson-databind:3.2.3")
+    implementation("tools.jackson.core:jackson-core:3.2.4")
+    implementation("tools.jackson.core:jackson-databind:3.2.4")
     implementation("io.hotmoka:toml4j:0.7.3")
 
     fun implementationPlugin(dep: String, version: String) = implementation("$dep:$dep.gradle.plugin:$version")
