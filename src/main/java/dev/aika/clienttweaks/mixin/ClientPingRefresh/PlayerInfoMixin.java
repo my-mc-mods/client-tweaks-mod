@@ -1,8 +1,8 @@
-package dev.aika.clienttweaks.mixin.PingTracker;
+package dev.aika.clienttweaks.mixin.ClientPingRefresh;
 
 import com.mojang.authlib.GameProfile;
 import dev.aika.clienttweaks.boot.ModConfig;
-import dev.aika.clienttweaks.feature.PingTracker;
+import dev.aika.clienttweaks.feature.ClientPingRefresh;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,11 +17,11 @@ public abstract class PlayerInfoMixin {
 
     @Inject(method = "getLatency", at = @At("HEAD"), cancellable = true)
     private void modifyLatency(CallbackInfoReturnable<Integer> cir) {
-        final var clientPingInterval = ModConfig.get().clientPingInterval();
-        if (clientPingInterval < 1 || clientPingInterval >= 30) return;
+        final int interval = ModConfig.get().clientPingRefresh();
+        if (interval < 1 || interval >= 30) return;
         if (Minecraft.getInstance()
                 .getGameProfile()./*? if >=1.21.9 {*/name()/*?} else {*//*getName()*//*?}*/
                 .equals(this.getProfile()./*? if >=1.21.9 {*/name()/*?} else {*//*getName()*//*?}*/))
-            cir.setReturnValue((int) PingTracker.getLatencyMs());
+            cir.setReturnValue((int) ClientPingRefresh.getLatencyMs());
     }
 }

@@ -1,4 +1,4 @@
-package dev.aika.clienttweaks.mixin.BetterLanguageFilter;
+package dev.aika.clienttweaks.mixin.LanguageCodeFilter;
 
 //? if >=1.21.11 {
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +24,7 @@ public abstract class LanguageSelectionListMixin {
             Operation<Stream<Map.Entry<String, LanguageInfo>>> operation,
             String filter
     ) {
-        if (!ModConfig.get().betterLanguageFilter()) return operation.call(instance, original);
+        if (!ModConfig.get().languageCodeFilter()) return operation.call(instance, original);
 
         final var f = filter.toLowerCase(Locale.ROOT);
         return operation.call(instance, (Predicate<Map.Entry<String, LanguageInfo>>)

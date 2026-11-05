@@ -1,6 +1,6 @@
-package dev.aika.clienttweaks.mixin.PingTracker;
+package dev.aika.clienttweaks.mixin.ClientPingRefresh;
 
-import dev.aika.clienttweaks.feature.PingTracker;
+import dev.aika.clienttweaks.feature.ClientPingRefresh;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.ping.ClientboundPongResponsePacket;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ClientPacketListenerMixin {
     @Inject(method = "handlePongResponse", at = @At("HEAD"))
     private void onPong(ClientboundPongResponsePacket packet, CallbackInfo ci) {
-        PingTracker.onPong(packet.time());
+        ClientPingRefresh.onPong(packet.time());
     }
 }

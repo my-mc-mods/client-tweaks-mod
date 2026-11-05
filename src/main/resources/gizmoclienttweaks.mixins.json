@@ -10,16 +10,16 @@
   },
   "client": [
     "Accessor.SoundEngineAccessor",
-    "BetterLanguageFilter.LanguageSelectionListMixin",
+    "ClientPingRefresh.ClientPacketListenerMixin",
+    "ClientPingRefresh.PlayerInfoMixin",
     "ClothConfigFix.DynamicElementListWidget_ElementEntryMixin",
     "ClothConfigFix.MultiElementListEntry_CategoryLabelWidgetMixin",
     "ClothConfigFix.TooltipListEntryMixin",
-    "HideUnsecureWarningToast.ToastManagerMixin",
+    "HideFireOverlay.ScreenEffectRendererMixin",
+    "HideInsecureWarningToast.ToastManagerMixin",
+    "LanguageCodeFilter.LanguageSelectionListMixin",
     "NumericPing.PlayerTabOverlayMixin",
-    "PingTracker.ClientPacketListenerMixin",
-    "PingTracker.PlayerInfoMixin",
     "RemoveRealmsButton.TitleScreenMixin",
-    "SmartFireOverlay.ScreenEffectRendererMixin",
     "Unfocused.SoundEngineMixin",
     "Unfocused.WindowMixin"
   ]

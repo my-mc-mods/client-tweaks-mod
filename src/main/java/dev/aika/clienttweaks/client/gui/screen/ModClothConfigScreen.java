@@ -7,7 +7,7 @@ import com.google.common.collect.Sets;
 import dev.aika.clienttweaks.boot.ModConfig;
 import dev.aika.clienttweaks.boot.ModMixinPlugin;
 import dev.aika.clienttweaks.config.ClientTweaksConfig;
-import dev.aika.clienttweaks.feature.PingTracker;
+import dev.aika.clienttweaks.feature.ClientPingRefresh;
 import dev.aika.clienttweaks.util.ColorUtil;
 import dev.aika.clienttweaks.util.ComponentUtil;
 import dev.aika.clienttweaks.util.NumberExpression;
@@ -56,33 +56,33 @@ public class ModClothConfigScreen {
                 .setDefaultValue(defaultConfig.isDevEnv())
                 .build());
         general.addEntry(eb.startBooleanToggle(
-                        Component.translatable("config.gizmoclienttweaks.better_language_filter"),
-                        conf.betterLanguageFilter())
+                        Component.translatable("config.gizmoclienttweaks.language_code_filter"),
+                        conf.languageCodeFilter())
                 .setTooltip(maybeTooltip(
-                        Component.translatable("config.gizmoclienttweaks.better_language_filter.@tooltip")))
-                .setSaveConsumer(conf::betterLanguageFilter)
-                .setDefaultValue(defaultConfig.betterLanguageFilter())
+                        Component.translatable("config.gizmoclienttweaks.language_code_filter.@tooltip")))
+                .setSaveConsumer(conf::languageCodeFilter)
+                .setDefaultValue(defaultConfig.languageCodeFilter())
                 .build());
         general.addEntry(eb.startBooleanToggle(
-                        Component.translatable("config.gizmoclienttweaks.smart_fire_overlay"),
-                        conf.smartFireOverlay())
+                        Component.translatable("config.gizmoclienttweaks.hide_fire_overlay"),
+                        conf.hideFireOverlay())
                 .setTooltip(maybeTooltip(
-                        Component.translatable("config.gizmoclienttweaks.smart_fire_overlay.@tooltip")))
-                .setSaveConsumer(conf::smartFireOverlay)
-                .setDefaultValue(defaultConfig.smartFireOverlay())
+                        Component.translatable("config.gizmoclienttweaks.hide_fire_overlay.@tooltip")))
+                .setSaveConsumer(conf::hideFireOverlay)
+                .setDefaultValue(defaultConfig.hideFireOverlay())
                 .build());
         general.addEntry(eb.startBooleanToggle(
-                        Component.translatable("config.gizmoclienttweaks.hide_unsecure_warning_toast"),
-                        conf.hideUnsecureWarningToast())
+                        Component.translatable("config.gizmoclienttweaks.hide_insecure_warning_toast"),
+                        conf.hideInsecureWarningToast())
                 .setTooltip(maybeTooltip(
-                        Component.translatable("config.gizmoclienttweaks.hide_unsecure_warning_toast.@tooltip")))
-                .setSaveConsumer(conf::hideUnsecureWarningToast)
-                .setDefaultValue(defaultConfig.hideUnsecureWarningToast())
+                        Component.translatable("config.gizmoclienttweaks.hide_insecure_warning_toast.@tooltip")))
+                .setSaveConsumer(conf::hideInsecureWarningToast)
+                .setDefaultValue(defaultConfig.hideInsecureWarningToast())
                 .build());
         general.addEntry(eb.startIntSlider(
                         Component.translatable("config.gizmoclienttweaks.unfocused_fps_limit"),
                         conf.unfocusedFpsLimit(),
-                        -1, 260
+                        0, 260
                 )
                 .setTooltip(maybeTooltip(
                         Component.translatable("config.gizmoclienttweaks.unfocused_fps_limit.@tooltip")))
@@ -101,17 +101,17 @@ public class ModClothConfigScreen {
                 .setDefaultValue(defaultConfig::unfocusedMute)
                 .build());
         general.addEntry(eb.startIntSlider(
-                        Component.translatable("config.gizmoclienttweaks.client_ping_interval"),
-                        conf.clientPingInterval(),
+                        Component.translatable("config.gizmoclienttweaks.client_ping_refresh"),
+                        conf.clientPingRefresh(),
                         -1, 30
                 )
                 .setTooltip(maybeTooltip(
-                        Component.translatable("config.gizmoclienttweaks.client_ping_interval.@tooltip")))
+                        Component.translatable("config.gizmoclienttweaks.client_ping_refresh.@tooltip")))
                 .setSaveConsumer(value -> {
-                    conf.clientPingInterval(value);
-                    PingTracker.setInterval(value);
+                    conf.clientPingRefresh(value);
+                    ClientPingRefresh.setInterval(value);
                 })
-                .setDefaultValue(defaultConfig::clientPingInterval)
+                .setDefaultValue(defaultConfig::clientPingRefresh)
                 .setTextGetter(value -> value < 1 || value >= 30
                         ? Component.translatable("config.gizmoclienttweaks.@disabled")
                         : Component.translatable("config.gizmoclienttweaks.@slider.seconds", value))

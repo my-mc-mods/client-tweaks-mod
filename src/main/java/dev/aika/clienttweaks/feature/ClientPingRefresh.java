@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 @UtilityClass
-public class PingTracker {
+public class ClientPingRefresh {
     private long INTERVAL_MS = TimeUnit.SECONDS.toMillis(1);
     private final long TIMEOUT_MS = TimeUnit.SECONDS.toMillis(5);
 
@@ -26,8 +26,8 @@ public class PingTracker {
     private boolean scheduled;
 
     public void tick(Minecraft minecraft) {
-        final int clientPingInterval = ModConfig.get().clientPingInterval();
-        if (clientPingInterval <= 0 || clientPingInterval >= 30) return;
+        final int clientPingRefresh = ModConfig.get().clientPingRefresh();
+        if (clientPingRefresh <= 0 || clientPingRefresh >= 30) return;
 
         ClientPacketListener listener = minecraft.getConnection();
 

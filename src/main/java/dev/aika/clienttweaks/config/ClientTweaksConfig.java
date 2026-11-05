@@ -17,12 +17,12 @@ public class ClientTweaksConfig {
     private transient final boolean isDevEnv = ModLoaderAccess.INSTANCE.isDevelopmentEnvironment();
 
     private boolean removeRealmsButton = isDevEnv;
-    private boolean betterLanguageFilter = true;
-    private boolean smartFireOverlay = false;
-    private boolean hideUnsecureWarningToast = isDevEnv;
+    private boolean languageCodeFilter = true;
+    private boolean hideFireOverlay = false;
+    private boolean hideInsecureWarningToast = isDevEnv;
     private boolean unfocusedMute = isDevEnv;
     private int unfocusedFpsLimit = 10;
-    private int clientPingInterval = 0;
+    private int clientPingRefresh = 0;
 
     private NumericPingConfig numericPing = new NumericPingConfig();
 

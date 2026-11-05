@@ -1,6 +1,6 @@
 package dev.aika.clienttweaks.event;
 
-import dev.aika.clienttweaks.feature.PingTracker;
+import dev.aika.clienttweaks.feature.ClientPingRefresh;
 import dev.aika.clienttweaks.feature.Unfocused;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
@@ -25,6 +25,6 @@ public class ClientEvents {
     }
 
     public void onEndClientTick(Minecraft minecraft) {
-        PingTracker.tick(minecraft);
+        ClientPingRefresh.tick(minecraft);
     }
 }

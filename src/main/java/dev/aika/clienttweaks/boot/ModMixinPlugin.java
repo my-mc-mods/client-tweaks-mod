@@ -27,7 +27,7 @@ public class ModMixinPlugin implements IMixinConfigPlugin {
         ModConfig.load();
 
         //? if <1.21.11
-        //disableMixin("dev.aika.clienttweaks.mixin.BetterLanguageFilter.LanguageSelectionListMixin");
+        //disableMixin("dev.aika.clienttweaks.mixin.LanguageCodeFilter.LanguageSelectionListMixin");
 
         disableUnless(ModConfig.get()::removeRealmsButton,
                 "dev.aika.clienttweaks.mixin.RemoveRealmsButton.TitleScreenMixin");

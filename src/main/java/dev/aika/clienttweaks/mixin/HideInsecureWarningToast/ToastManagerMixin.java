@@ -1,4 +1,4 @@
-package dev.aika.clienttweaks.mixin.HideUnsecureWarningToast;
+package dev.aika.clienttweaks.mixin.HideInsecureWarningToast;
 
 import dev.aika.clienttweaks.boot.ModConfig;
 import net.minecraft.client.gui.components.toasts.SystemToast;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ToastManagerMixin {
     @Inject(method = "addToast", at = @At("HEAD"), cancellable = true)
     public void addToast(Toast toast, CallbackInfo ci) {
-        if (!ModConfig.get().hideUnsecureWarningToast()) return;
+        if (!ModConfig.get().hideInsecureWarningToast()) return;
         if (toast instanceof SystemToast st
                 && st.getToken() == SystemToast.SystemToastId.UNSECURE_SERVER_WARNING) {
             ci.cancel();

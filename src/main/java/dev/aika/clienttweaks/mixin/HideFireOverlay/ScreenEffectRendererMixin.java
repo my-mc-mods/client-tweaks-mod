@@ -1,4 +1,4 @@
-package dev.aika.clienttweaks.mixin.SmartFireOverlay;
+package dev.aika.clienttweaks.mixin.HideFireOverlay;
 
 import dev.aika.clienttweaks.boot.ModConfig;
 import net.minecraft.client.Minecraft;
@@ -21,7 +21,7 @@ public abstract class ScreenEffectRendererMixin {
     private static void renderScreenEffect(CallbackInfo ci) { //?} else {
     /*@Inject(method = "renderFire", cancellable = true, at = @At("HEAD"))
     private static void renderScreenEffect(CallbackInfo ci) { *///?}
-        if (!ModConfig.get().smartFireOverlay()) return;
+        if (!ModConfig.get().hideFireOverlay()) return;
         final var player = Minecraft.getInstance().player;
         if (player == null || player.isSpectator()) return;
         if (player.isCreative() || player.hasEffect(MobEffects.FIRE_RESISTANCE)) ci.cancel();
