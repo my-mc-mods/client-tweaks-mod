@@ -1,6 +1,6 @@
 {
   "modmenu.nameTranslation.gizmoclienttweaks": "Gizmo's Client Tweaks",
-  "modmenu.descriptionTranslation.gizmoclienttweaks": "Gizmo's Client Tweaks",
+  "modmenu.descriptionTranslation.gizmoclienttweaks": "A client-side Minecraft mod that bundles small, configurable quality-of-life tweaks for vanilla gameplay.",
   "gui.gizmoclienttweaks.cloth_config_warning.message": "Installing §lCloth Config API§r allows you to edit this mod's configuration through a graphical interface, but it doesn't appear to be installed.\n\nDon't worry! You can still edit the %s file manually, then click the §a§lLoad Config§r button below to reload the configuration.",
   "gui.gizmoclienttweaks.cloth_config_warning.load_config": "Load Config",
   "gui.gizmoclienttweaks.cloth_config_warning.open_config_folder": "Open Config Folder",

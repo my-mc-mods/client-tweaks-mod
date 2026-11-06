@@ -8,7 +8,7 @@ mod:
   authors: [ "Gizmo" ]
   contributors: [ ]
   description: |-
-    Gizmo's Client Tweaks
+    A client-side Minecraft mod that bundles small, configurable quality-of-life tweaks for vanilla gameplay.
   contact:
     homepage: "https://github.com/my-mc-mods/client-tweaks-mod"
     sources: "https://github.com/my-mc-mods/client-tweaks-mod"

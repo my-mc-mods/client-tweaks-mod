@@ -1,6 +1,6 @@
 {
   "modmenu.nameTranslation.gizmoclienttweaks": "Gizmo 的客户端调整",
-  "modmenu.descriptionTranslation.gizmoclienttweaks": "Gizmo 的客户端调整",
+  "modmenu.descriptionTranslation.gizmoclienttweaks": "一个客户端 Minecraft 模组，为原版客户端提供了一系列简单、可配置的小优化。",
   "gui.gizmoclienttweaks.cloth_config_warning.message": "安装 §lCloth Config API§r 后，你就可以通过图形界面修改模组配置，但目前似乎尚未安装该模组。\n\n无需担心，你仍然可以手动编辑 %s 文件，然后点击下方的 §a§l加载配置§r 按钮重新加载配置。",
   "gui.gizmoclienttweaks.cloth_config_warning.load_config": "加载配置",
   "gui.gizmoclienttweaks.cloth_config_warning.open_config_folder": "打开配置文件所在目录",
