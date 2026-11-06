@@ -103,7 +103,7 @@ public class ModClothConfigScreen {
         general.addEntry(eb.startIntSlider(
                         Component.translatable("config.gizmoclienttweaks.client_ping_refresh"),
                         conf.clientPingRefresh(),
-                        -1, 30
+                        0, 30
                 )
                 .setTooltip(maybeTooltip(
                         Component.translatable("config.gizmoclienttweaks.client_ping_refresh.@tooltip")))
