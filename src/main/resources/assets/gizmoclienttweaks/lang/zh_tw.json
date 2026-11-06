@@ -1,6 +1,6 @@
 {
-  "modmenu.nameTranslation.gizmoclienttweaks": "Gizmo 的客户端调整",
-  "modmenu.descriptionTranslation.gizmoclienttweaks": "Gizmo 的客户端调整",
+  "modmenu.nameTranslation.gizmoclienttweaks": "Gizmo 的用戶端調整",
+  "modmenu.descriptionTranslation.gizmoclienttweaks": "Gizmo 的用戶端調整",
   "gui.gizmoclienttweaks.cloth_config_warning.message": "安裝 §lCloth Config API§r 後，你就可以透過圖形介面修改模組設定，但目前似乎尚未安裝此模組。\n\n別擔心，你仍然可以手動編輯 %s 檔案，然後點擊下方的 §a§l載入設定§r 按鈕重新載入設定。",
   "gui.gizmoclienttweaks.cloth_config_warning.load_config": "載入設定",
   "gui.gizmoclienttweaks.cloth_config_warning.open_config_folder": "開啟設定檔所在資料夾",
