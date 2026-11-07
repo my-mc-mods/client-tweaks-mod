@@ -76,9 +76,28 @@ publishing {
     }
 }
 
-tasks.withType<JavaCompile> {
-    options.encoding = "UTF-8"
-    options.release.set(requiredJava.majorVersion.toInt())
+tasks {
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+        options.release.set(requiredJava.majorVersion.toInt())
+    }
+
+    val collectedLibs = rootProject.layout.buildDirectory.dir("libs/${"mod.version"()}")
+
+    register<Copy>("buildAndCollect") {
+        group = "build"
+        description = "Builds mod jars and copies results to `build/libs/{mod version}/`"
+
+        dependsOn("shadowJar")
+
+        inputs.property("version", "mod.version"())
+        from(modJar.flatMap { it.archiveFile })
+        into(collectedLibs)
+    }
+
+    named<Delete>("clean") {
+        delete(collectedLibs)
+    }
 }
 
 java {

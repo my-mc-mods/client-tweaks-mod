@@ -56,24 +56,8 @@ neoForge {
     }
 }
 
-tasks {
-    named("createMinecraftArtifacts") {
-        dependsOn("stonecutterGenerate")
-    }
-
-    register<Copy>("buildAndCollect") {
-        group = "build"
-        description = "Builds mod jars and copies results to `build/libs/{mod version}/`"
-
-        dependsOn("shadowJar")
-
-        inputs.property("version", "mod.version"())
-        from(
-            jar.flatMap { it.archiveFile },
-//            named<Jar>("sourcesJar").flatMap { it.archiveFile }
-        )
-        into(rootProject.layout.buildDirectory.file("libs/${"mod.version"()}"))
-    }
+tasks.named("createMinecraftArtifacts") {
+    dependsOn("stonecutterGenerate")
 }
 
 operator fun String.invoke(): String = project.ext[this] as? String ?: error("No property \"$this\"")

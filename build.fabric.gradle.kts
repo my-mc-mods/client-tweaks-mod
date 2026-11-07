@@ -80,21 +80,4 @@ loom {
     mods { create("mod.id"()) { sourceSet(sourceSets.main.get()) } }
 }
 
-tasks {
-    register<Copy>("buildAndCollect") {
-        group = "build"
-        description = "Builds mod jars and copies results to `build/libs/{mod version}/`"
-
-        dependsOn("shadowJar")
-
-        inputs.property("version", "mod.version"())
-        // loomx.mod(Sources)Jar returns the jar task for the applied loom variant
-        from(
-            loomx.modJar.flatMap { it.archiveFile },
-//            loomx.modSourcesJar.flatMap { it.archiveFile }
-        )
-        into(rootProject.layout.buildDirectory.file("libs/${"mod.version"()}"))
-    }
-}
-
 operator fun String.invoke(): String = project.ext[this] as? String ?: error("No property \"$this\"")
