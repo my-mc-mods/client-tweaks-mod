@@ -4,6 +4,7 @@ plugins {
     id("java-library")
     id("maven-publish")
     id("mmm.shadow-convention")
+    id("me.modmuss50.mod-publish-plugin")
 }
 
 val (xVersion, loader) = name.split('-', limit = 2)
@@ -73,6 +74,27 @@ publishing {
 
             from(components["java"])
         }
+    }
+}
+
+publishMods {
+    dryRun.set(true)
+
+    type.set(if ("mod.version"().contains("-SNAPSHOT")) ALPHA else STABLE)
+    file.set(modJar.flatMap { it.archiveFile })
+    modLoaders.add(loader)
+    displayName.set("${"mod.version"()} $loader $xVersion")
+    changelog = rootProject.changelogSection("mod.version"())
+        ?: error("No CHANGELOG.md section found for version ${"mod.version"()}")
+
+    curseforge {
+        projectId.set(sc(project).properties.getOrNull<String>("mod.curseProjectId"))
+        accessToken.set(providers.gradleProperty("CURSEFORGE_TOKEN"))
+
+        sc(project).properties.raw("mod.mc_releases").asList().forEach { minecraftVersions.add(it.toString()) }
+        optional("cloth-config")
+        changelogType.set("markdown")
+        client = true
     }
 }
 

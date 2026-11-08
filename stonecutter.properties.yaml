@@ -13,6 +13,7 @@ mod:
     homepage: "https://github.com/my-mc-mods/client-tweaks-mod"
     sources: "https://github.com/my-mc-mods/client-tweaks-mod"
     issues: "https://github.com/my-mc-mods/client-tweaks-mod/issues"
+  curseProjectId: "1689768"
 
 # https://fabricmc.net/develop/
 deps.fabric_loader: "0.20.1"
@@ -41,7 +42,7 @@ loomx.loom_version: "1.19.3"
   mod.mc_releases: [ "26.3" ]
   deps.cloth_config: "26.3.158"
 "26.4":
-  mod.mc_releases: [ "26.4" ]
+  mod.mc_releases: [ "26.4-snapshot" ]
 
 
 fabric:

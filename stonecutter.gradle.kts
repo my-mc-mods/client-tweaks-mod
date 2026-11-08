@@ -35,7 +35,7 @@ stonecutter parameters {
     constants["release"] = properties.get<String>("mod.id") != "template"
     constants["modmenu"] = properties.getOrNull<String>("deps.modmenu") != null
     constants["cloth_config"] = properties.getOrNull<String>("deps.cloth_config") != null
-    dependencies["fapi"] = properties.getOrNull<String>("deps.fabric_api") ?: "0"
+    dependencies["fabric_api"] = properties.getOrNull<String>("deps.fabric_api") ?: "0"
 
     replacements {
         string(current.parsed >= "1.21.9") {

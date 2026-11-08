@@ -23,4 +23,5 @@ dependencies {
     implementationPlugin("dev.kikugie.stonecutter", rootProperties.getProperty("stonecutter"))
     implementationPlugin("dev.kikugie.loom-back-compat", rootProperties.getProperty("loom-back-compat"))
     implementationPlugin("net.fabricmc.fabric-loom-companion", "1.18.2")
+    implementationPlugin("me.modmuss50.mod-publish-plugin", "2.2.1")
 }
