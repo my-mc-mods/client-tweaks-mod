@@ -12,14 +12,19 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.function.Supplier;
 
 public final class ConfigManager<T> implements Supplier<T> {
-    private final File CONFIG_FILE;
+    @Getter
+    private final Path configDirectory;
+    @Getter
+    private final Path configFile;
+    private final Path legacyConfigFile;
     private T config;
     private final Class<T> configClass;
     @Getter
@@ -33,7 +38,10 @@ public final class ConfigManager<T> implements Supplier<T> {
 
     private ConfigManager(Class<T> configClass, String modId) {
         this.configClass = configClass;
-        this.CONFIG_FILE = new File(ModLoaderAccess.INSTANCE.getConfigDir().toFile(), modId + ".json");
+        final Path root = ModLoaderAccess.INSTANCE.getConfigDir();
+        this.configDirectory = root.resolve(modId);
+        this.configFile = this.configDirectory.resolve(modId + ".json");
+        this.legacyConfigFile = root.resolve(modId + ".json");
     }
 
     public static <T> ConfigManager<T> create(Class<T> configClass, String modId) {
@@ -47,26 +55,43 @@ public final class ConfigManager<T> implements Supplier<T> {
     @SuppressWarnings("UnusedReturnValue")
     @SneakyThrows
     public ConfigManager<T> load() {
-        if (!CONFIG_FILE.exists()) {
+        migrateLegacyConfigIfNeeded();
+
+        if (!Files.exists(configFile)) {
             config = configClass.getConstructor().newInstance();
             save();
             return this;
         }
 
-        try (var reader = new FileReader(CONFIG_FILE)) {
+        try (Reader reader = Files.newBufferedReader(configFile)) {
             config = GSON.fromJson(reader, configClass);
         } catch (IOException e) {
-            Constants.LOG.error("Failed to read config file: {}", CONFIG_FILE, e);
+            Constants.LOG.error("Failed to read config file: {}", configFile, e);
         }
         return this;
     }
 
     public void save() {
         final var configStr = GSON.toJson(config);
-        try (var writer = new FileWriter(CONFIG_FILE)) {
-            writer.write(configStr);
+        try {
+            Files.createDirectories(configDirectory);
+            try (Writer writer = Files.newBufferedWriter(configFile)) {
+                writer.write(configStr);
+            }
         } catch (IOException e) {
-            Constants.LOG.error("Failed to write config file {}", CONFIG_FILE, e);
+            Constants.LOG.error("Failed to write config file {}", configFile, e);
+        }
+    }
+
+    private void migrateLegacyConfigIfNeeded() {
+        if (Files.exists(configFile) || !Files.exists(legacyConfigFile)) return;
+
+        try {
+            Files.createDirectories(configDirectory);
+            Files.move(legacyConfigFile, configFile);
+            Constants.LOG.info("Migrated config from {} to {}", legacyConfigFile, configFile);
+        } catch (IOException e) {
+            Constants.LOG.error("Failed to migrate config from {} to {}", legacyConfigFile, configFile, e);
         }
     }
 }

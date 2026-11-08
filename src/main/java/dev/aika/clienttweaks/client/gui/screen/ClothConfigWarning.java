@@ -1,7 +1,6 @@
 package dev.aika.clienttweaks.client.gui.screen;
 
 import dev.aika.clienttweaks.boot.ModConfig;
-import dev.aika.clienttweaks.util.ModLoaderAccess;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
@@ -26,7 +25,7 @@ public class ClothConfigWarning extends EasyScreen {
         contents.defaultCellSetting().alignHorizontallyCenter();
         contents.addChild(new MultiLineTextWidget(
                 Component.translatable("gui.gizmoclienttweaks.cloth_config_warning.message",
-                        Component.literal("gizmoclienttweaks.json")
+                        Component.literal("gizmoclienttweaks/gizmoclienttweaks.json")
                                 .withStyle(Style.EMPTY.applyFormat(ChatFormatting.UNDERLINE))), this.font
         ).setCentered(true).setMaxWidth(width - 30));
         final var buttons = contents.addChild(LinearLayout.horizontal().spacing(8));
@@ -45,7 +44,7 @@ public class ClothConfigWarning extends EasyScreen {
     }
 
     private void openConfigFolder(Button ignoreButton) {
-        var path = ModLoaderAccess.INSTANCE.getConfigDir(); //? if >=26.3 {
+        var path = ModConfig.getConfigDirectory(); //? if >=26.3 {
         /*com.mojang.blaze3d.Blaze3D.openUri(path.toUri()); *///?} else {
         net.minecraft.util.Util.getPlatform().openUri(path.toUri()); //?}
     }

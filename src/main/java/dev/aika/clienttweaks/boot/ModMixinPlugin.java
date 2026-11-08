@@ -8,6 +8,8 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -55,6 +57,16 @@ public class ModMixinPlugin implements IMixinConfigPlugin {
         disabledMixins.add(mixinClassName);
     }
 
+    private void writeAvailableMixins() {
+        final var path = ModConfig.getConfigDirectory().resolve("available_mixins.txt");
+        try {
+            Files.createDirectories(path.getParent());
+            Files.write(path, ImmutableSortedSet.copyOf(mixins));
+        } catch (IOException e) {
+            Constants.LOG.error("Failed to write available mixins list: {}", path, e);
+        }
+    }
+
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         mixins.add(mixinClassName);
@@ -73,6 +85,7 @@ public class ModMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
+        if (ModLoaderAccess.INSTANCE.isClient()) writeAvailableMixins();
     }
 
     @Override

@@ -1,5 +1,12 @@
 # Unreleased
 
+## Changed
+
+- Config file moved to `config/gizmoclienttweaks/gizmoclienttweaks.json`. Existing `config/gizmoclienttweaks.json` from
+  0.1.0 is migrated automatically on first launch.
+- Writes `config/gizmoclienttweaks/available_mixins.txt` listing mixin class names that can be added to
+  `disabled_mixins` in the config.
+
 # 0.1.0 - 2026-11-07
 
 First release of the client-side mod, for Minecraft 1.21.1, 1.21.11, 26.1.x, 26.2 and 26.3 on Fabric and NeoForge,
@@ -26,5 +33,5 @@ plus 26.4 snapshots on Fabric.
 - **Per-mixin switches** — the config screen lists every applied mixin and can disable individual ones; changes take
   effect after a restart.
 
-Settings are stored in `config/gizmoclienttweaks.json`. Cloth Config and Mod Menu are optional; the mod works without
-them.
+Settings are stored in `config/gizmoclienttweaks/gizmoclienttweaks.json`. Cloth Config and Mod Menu are optional; the
+mod works without them.

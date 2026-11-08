@@ -6,6 +6,8 @@ import dev.aika.clienttweaks.config.ConfigManager;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
+import java.nio.file.Path;
+
 @SuppressWarnings("unused")
 @UtilityClass
 public class ModConfig {
@@ -24,5 +26,9 @@ public class ModConfig {
 
     public void load() {
         getConfig().load();
+    }
+
+    public Path getConfigDirectory() {
+        return getConfig().getConfigDirectory();
     }
 }
