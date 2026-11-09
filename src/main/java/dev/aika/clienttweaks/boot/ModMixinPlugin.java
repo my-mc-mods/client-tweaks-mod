@@ -70,7 +70,15 @@ public class ModMixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         mixins.add(mixinClassName);
-        return !disabledMixins.contains(mixinClassName) && !ModConfig.get().disabledMixins().contains(mixinClassName);
+        if (disabledMixins.contains(mixinClassName)) {
+            Constants.LOG.warn("Mixin {} is disabled by the plugin and will not be applied to {}", mixinClassName, targetClassName);
+            return false;
+        }
+        if (ModConfig.get().disabledMixins().contains(mixinClassName)) {
+            Constants.LOG.warn("Mixin {} is disabled in the config and will not be applied to {}", mixinClassName, targetClassName);
+            return false;
+        }
+        return true;
     }
 
     @Override
