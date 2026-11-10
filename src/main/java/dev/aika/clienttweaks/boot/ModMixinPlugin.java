@@ -37,7 +37,8 @@ public class ModMixinPlugin implements IMixinConfigPlugin {
         disableUnless(ModLoaderAccess.INSTANCE::isClothConfigLoaded,
                 //? if >=26 {
                 "dev.aika.clienttweaks.mixin.ClothConfigFix.DynamicElementListWidget_ElementEntryMixin",
-                "dev.aika.clienttweaks.mixin.ClothConfigFix.MultiElementListEntry_CategoryLabelWidgetMixin", //?}
+                "dev.aika.clienttweaks.mixin.ClothConfigFix.MultiElementListEntry_CategoryLabelWidgetMixin",
+                "dev.aika.clienttweaks.mixin.ClothConfigFix.MultiElementListEntryMixin", //?}
                 "dev.aika.clienttweaks.mixin.ClothConfigFix.TooltipListEntryMixin");
     }
 

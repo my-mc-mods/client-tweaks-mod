@@ -3,8 +3,7 @@
   "package": "dev.aika.clienttweaks.mixin",
   "plugin": "dev.aika.clienttweaks.boot.ModMixinPlugin",
   "compatibilityLevel": "${java}",
-  "mixins": [
-  ],
+  "mixins": [],
   "injectors": {
     "defaultRequire": 1
   },
@@ -14,6 +13,7 @@
     "ClientPingRefresh.PlayerInfoMixin",
     "ClothConfigFix.DynamicElementListWidget_ElementEntryMixin",
     "ClothConfigFix.MultiElementListEntry_CategoryLabelWidgetMixin",
+    "ClothConfigFix.MultiElementListEntryMixin",
     "ClothConfigFix.TooltipListEntryMixin",
     "HideFireOverlay.ScreenEffectRendererMixin",
     "HideInsecureWarningToast.ToastManagerMixin",
