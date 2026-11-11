@@ -1,5 +1,3 @@
-import net.fabricmc.loom.task.RemapJarTask
-
 plugins {
     id("java-library")
     id("com.gradleup.shadow")
@@ -23,15 +21,14 @@ tasks {
         mergeServiceFiles()
     }
 
-    if (obfuscated && isFabric) named<RemapJarTask>("remapJar") {
-        inputFile.set(shadowJar.flatMap { it.archiveFile })
+    if (obfuscated && isFabric) named("remapJar") {
+        setProperty("inputFile", shadowJar.flatMap { it.archiveFile })
         dependsOn(shadowJar)
     }
 }
 
 configurations {
-    val out =
-        if (obfuscated && isFabric) tasks.named<RemapJarTask>("remapJar") else tasks.shadowJar
+    val out = if (obfuscated && isFabric) tasks.named("remapJar") else tasks.shadowJar
     apiElements {
         outgoing.artifacts.clear()
         outgoing.artifact(out)

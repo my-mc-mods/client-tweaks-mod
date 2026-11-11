@@ -81,7 +81,7 @@ publishMods {
     dryRun.set(true)
 
     type.set(if ("mod.version"().contains("-SNAPSHOT")) ALPHA else STABLE)
-    file.set(modJar.flatMap { it.archiveFile })
+    file.set(modJar)
     modLoaders.add(loader)
     displayName.set("${"mod.version"()} $loader $xVersion")
     changelog = rootProject.changelogSection("mod.version"())
@@ -113,7 +113,7 @@ tasks {
         dependsOn("shadowJar")
 
         inputs.property("version", "mod.version"())
-        from(modJar.flatMap { it.archiveFile })
+        from(modJar)
         into(collectedLibs)
     }
 

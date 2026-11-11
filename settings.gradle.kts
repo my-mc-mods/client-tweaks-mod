@@ -35,3 +35,9 @@ stonecutter {
 
 rootProject.name = "client-tweaks-mod"
 includeBuild("build-logic")
+
+// Stonecutter exposes this YAML value through the root project, while loom-back-compat
+// checks each project's own extra properties during beforeProject. Copy it down first.
+gradle.lifecycle.beforeProject {
+    if (path != ":") rootProject.findProperty("loomx.loom_version")?.let { extra["loomx.loom_version"] = it }
+}
