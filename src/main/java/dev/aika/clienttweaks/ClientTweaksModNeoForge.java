@@ -3,6 +3,7 @@ package dev.aika.clienttweaks;
 //? if neoforge {
 /*import dev.aika.clienttweaks.compat.ClothConfigIntegration;
 import dev.aika.clienttweaks.event.ClientEvents;
+import dev.aika.clienttweaks.feature.StatusIconsHud;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -25,21 +26,26 @@ public final class ClientTweaksModNeoForge {
     @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
     public static class Events {
         //? if <1.21.11
-        //private static boolean initialized = false;
+        private static boolean initialized = false;
 
         //? if >=1.21.6 {
-        @SubscribeEvent
+        /^@SubscribeEvent
         public static void onClientStarted(net.neoforged.neoforge.client.event.lifecycle.ClientStartedEvent event) {
             ClientEvents.onClientStarted();
-        } //?}
+        } ^///?}
 
         @SubscribeEvent
         public static void onClientTick(ClientTickEvent.Post event) {
             //? if <1.21.11 {
-            /^if (initialized) return;
+            if (initialized) return;
             initialized = true;
-            ClientEvents.onClientStarted(); ^///?}
+            ClientEvents.onClientStarted(); //?}
             ClientEvents.onEndClientTick(Minecraft.getInstance());
+        }
+
+        @SubscribeEvent
+        public static void onRenderGui(net.neoforged.neoforge.client.event.RenderGuiEvent.Post event) {
+            StatusIconsHud.render(event.getGuiGraphics(), event.getPartialTick().getGameTimeDeltaPartialTick(false));
         }
     }
 }

@@ -25,6 +25,7 @@ public class ClientTweaksConfig {
     private int clientPingRefresh = 0;
 
     private NumericPingConfig numericPing = new NumericPingConfig();
+    private StatusIconsConfig statusIcons = new StatusIconsConfig();
 
     private Set<String> disabledMixins = new LinkedHashSet<>();
 
@@ -56,6 +57,24 @@ public class ClientTweaksConfig {
             public Rule(String range, Color color, float opacity) {
                 this(range, new Color(color.getRed(), color.getGreen(), color.getBlue(), Math.round(opacity * 255)));
             }
+        }
+    }
+
+    @Getter @Setter
+    @Accessors(fluent = true)
+    public static class StatusIconsConfig {
+        private boolean showOnFire = true;
+        private boolean showFreezing = true;
+        private Anchor anchor = Anchor.TOP_RIGHT;
+        private int offsetX = -5;
+        private int offsetY = 5;
+        private int iconSize = 18;
+        private int iconSpacing = 2;
+
+        public enum Anchor {
+            TOP_LEFT, TOP_CENTER, TOP_RIGHT,
+            MIDDLE_LEFT, CENTER, MIDDLE_RIGHT,
+            BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
         }
     }
 }

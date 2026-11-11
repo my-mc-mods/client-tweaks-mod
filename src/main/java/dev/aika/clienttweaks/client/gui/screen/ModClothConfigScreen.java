@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import dev.aika.clienttweaks.boot.ModConfig;
 import dev.aika.clienttweaks.boot.ModMixinPlugin;
 import dev.aika.clienttweaks.config.ClientTweaksConfig;
+import dev.aika.clienttweaks.config.ClientTweaksConfig.StatusIconsConfig;
 import dev.aika.clienttweaks.feature.ClientPingRefresh;
 import dev.aika.clienttweaks.util.ColorUtil;
 import dev.aika.clienttweaks.util.ComponentUtil;
@@ -116,6 +117,73 @@ public class ModClothConfigScreen {
                         ? Component.translatable("config.gizmoclienttweaks.@disabled")
                         : Component.translatable("config.gizmoclienttweaks.@slider.seconds", value))
                 .build());
+
+        final var statusIcons = eb.startSubCategory(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.@category"))
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.@tooltip")))
+                .setExpanded(true);
+        final var siConf = conf.statusIcons();
+        statusIcons.addLast(eb.startBooleanToggle(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.show_on_fire"),
+                        siConf.showOnFire())
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.show_on_fire.@tooltip")))
+                .setSaveConsumer(siConf::showOnFire)
+                .setDefaultValue(defaultConfig.statusIcons()::showOnFire)
+                .build());
+        statusIcons.addLast(eb.startBooleanToggle(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.show_freezing"),
+                        siConf.showFreezing())
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.show_freezing.@tooltip")))
+                .setSaveConsumer(siConf::showFreezing)
+                .setDefaultValue(defaultConfig.statusIcons()::showFreezing)
+                .build());
+        statusIcons.addLast(eb.startEnumSelector(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.anchor"),
+                        StatusIconsConfig.Anchor.class,
+                        siConf.anchor())
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.anchor.@tooltip")))
+                .setSaveConsumer(siConf::anchor)
+                .setDefaultValue(defaultConfig.statusIcons()::anchor)
+                .build());
+        statusIcons.addLast(eb.startIntField(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.offset_x"),
+                        siConf.offsetX())
+                .setMin(-500).setMax(500)
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.offset_x.@tooltip")))
+                .setSaveConsumer(siConf::offsetX)
+                .setDefaultValue(defaultConfig.statusIcons()::offsetX)
+                .build());
+        statusIcons.addLast(eb.startIntField(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.offset_y"),
+                        siConf.offsetY())
+                .setMin(-500).setMax(500)
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.offset_y.@tooltip")))
+                .setSaveConsumer(siConf::offsetY)
+                .setDefaultValue(defaultConfig.statusIcons()::offsetY)
+                .build());
+        statusIcons.addLast(eb.startIntSlider(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.icon_size"),
+                        siConf.iconSize(), 8, 64)
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.icon_size.@tooltip")))
+                .setSaveConsumer(siConf::iconSize)
+                .setDefaultValue(defaultConfig.statusIcons()::iconSize)
+                .build());
+        statusIcons.addLast(eb.startIntSlider(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.icon_spacing"),
+                        siConf.iconSpacing(), 0, 20)
+                .setTooltip(maybeTooltip(
+                        Component.translatable("config.gizmoclienttweaks.status_icons.icon_spacing.@tooltip")))
+                .setSaveConsumer(siConf::iconSpacing)
+                .setDefaultValue(defaultConfig.statusIcons()::iconSpacing)
+                .build());
+        general.addEntry(statusIcons.build());
 
         final var numericPing = eb.startSubCategory(
                         Component.translatable("config.gizmoclienttweaks.numeric_ping.@category"))
