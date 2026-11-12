@@ -1,2 +1,6 @@
 [tools]
 java = "25"
+
+[tasks.publishMods]
+description = "Publish mods to CurseForge (disables dry-run)"
+run = "./gradlew publishMods -PpublishMods.dryRun=false"

@@ -78,7 +78,7 @@ publishing {
 }
 
 publishMods {
-    dryRun.set(true)
+    dryRun.set(providers.gradleProperty("publishMods.dryRun").map(String::toBoolean).orElse(true))
 
     type.set(if ("mod.version"().contains("-SNAPSHOT")) ALPHA else STABLE)
     file.set(modJar)
