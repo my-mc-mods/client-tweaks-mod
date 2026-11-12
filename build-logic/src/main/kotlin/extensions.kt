@@ -23,7 +23,7 @@ val Project.requiredJava: JavaVersion
         else -> JavaVersion.VERSION_1_8
     }
 val Project.compatibleVersions: List<String>
-    get() = sc(this).properties.rawOrNull("mod", "mc_releases")?.asList().orEmpty().map { it.toString() }
+    get() = sc(this).properties.raw("mod.mc_releases").asList().map(Any::toString)
 val Project.isLinux: Boolean get() = System.getProperty("os.name").lowercase().contains("linux")
 
 @Suppress("UNCHECKED_CAST")
@@ -63,7 +63,7 @@ fun Project.changelogSection(version: String): String? {
         val match = heading.find(line) ?: continue
         val title = match.groupValues[2].trim().trim('[', ']', '`')
         val titleVersion = versionToken.find(title)?.value?.removePrefix("v")
-        if (titleVersion == target) {
+        if (titleVersion == target || title.equals(target, ignoreCase = true)) {
             start = index
             level = match.groupValues[1].length
             break

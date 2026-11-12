@@ -8,7 +8,9 @@ plugins {
 }
 
 val (xVersion, loader) = name.split('-', limit = 2)
-val modVersion = SemanticVersion.parse("mod.version"())
+val modVersionString = "mod.version"()
+val modVersion = SemanticVersion.parse(modVersionString)
+val isSnapshot = modVersionString.uppercase().endsWith("-SNAPSHOT")
 
 version = "${"mod.version"().removeSuffix("-SNAPSHOT")}+${sc(project).current.version}"
 
@@ -80,18 +82,28 @@ publishing {
 publishMods {
     dryRun.set(providers.gradleProperty("publishMods.dryRun").map(String::toBoolean).orElse(true))
 
-    type.set(if ("mod.version"().contains("-SNAPSHOT")) ALPHA else STABLE)
+    type.set(if (isSnapshot) ALPHA else STABLE)
     file.set(modJar)
     modLoaders.add(loader)
-    displayName.set("${"mod.version"()} $loader $xVersion")
-    changelog = rootProject.changelogSection("mod.version"())
-        ?: error("No CHANGELOG.md section found for version ${"mod.version"()}")
+    displayName.set("$modVersionString $loader $xVersion")
+    changelog = if (isSnapshot) {
+        buildString {
+            appendLine("> ⚠️ This is a snapshot build and may be unstable.")
+            rootProject.changelogSection("Unreleased")?.let {
+                appendLine()
+                append(it)
+            }
+        }
+    } else {
+        rootProject.changelogSection(modVersionString)
+            ?: error("No CHANGELOG.md section found for version $modVersionString")
+    }
 
     curseforge {
         projectId.set(sc(project).properties.getOrNull<String>("mod.curseProjectId"))
         accessToken.set(providers.gradleProperty("CURSEFORGE_TOKEN"))
 
-        sc(project).properties.raw("mod.mc_releases").asList().forEach { minecraftVersions.add(it.toString()) }
+        compatibleVersions.forEach { minecraftVersions.add(it) }
         optional("cloth-config")
         changelogType.set("markdown")
         client = true

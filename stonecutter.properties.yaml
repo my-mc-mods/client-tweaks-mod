@@ -3,7 +3,7 @@ mod:
   id: "gizmoclienttweaks"
   name: "Gizmo's Client Tweaks"
   group: "dev.aika.clienttweaks"
-  version: "0.1.0"
+  version: "1.0.0-SNAPSHOT"
   license: "MIT" # https://spdx.org/licenses/
   authors: [ "Gizmo" ]
   contributors: [ ]
