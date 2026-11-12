@@ -28,34 +28,56 @@ val generateModMetadataFile = tasks.register("generateModMetadataFile") {
     val outputDir = layout.buildDirectory.dir("generated/mmm/resources")
     outputs.dir(outputDir)
 
-    val inputFile = rootProject.file("src/main/templates/fabric.mod.json")
-    val outputFile = outputDir.get().file("fabric.mod.json").asFile
-    inputs.dir(inputFile)
+    val inputFile = rootProject.layout.projectDirectory.file("src/main/templates/fabric.mod.json")
+    inputs.file(inputFile)
+    inputs.property("mod.id", providers.provider { "mod.id"() })
+    inputs.property("mod.name", providers.provider { "mod.name"() })
+    inputs.property("mod.version", providers.provider { "mod.version"() })
+    inputs.property("mod.description", providers.provider { "mod.description"() })
+    inputs.property("mod.license", providers.provider { "mod.license"() })
+    inputs.property(
+        "mod.authors",
+        providers.provider { sc(project).properties.rawOrNull("mod", "authors")?.toJson()?.toString() ?: "" })
+    inputs.property(
+        "mod.contact",
+        providers.provider { sc(project).properties.rawOrNull("mod", "contact")?.toJson()?.toString() ?: "" })
+    inputs.property(
+        "mod.contributors",
+        providers.provider { sc(project).properties.rawOrNull("mod", "contributors")?.toJson()?.toString() ?: "" })
+    inputs.property("modmenu", providers.provider { sc(project).constants["modmenu"]?.toString() ?: "" })
 
-    outputFile.parentFile.mkdirs()
+    doLast {
+        val outputFile = outputDir.get().file("fabric.mod.json").asFile
 
-    val mapper = tools.jackson.databind.ObjectMapper()
-    val json = mapper.readTree(inputFile.reader()) as ObjectNode
-    json.let {
-        it.put("id", "mod.id"())
-        it.put("name", "mod.name"())
-        it.put("version", "mod.version"().removeSuffix("-SNAPSHOT"))
-        it.put("description", "mod.description"().trim())
-        it.put("license", "mod.license"())
-        it.put("icon", "${"mod.id"()}_icon.png")
-        sc(project).properties.rawOrNull("mod", "authors")?.asList()
-            ?.let { v -> it.set("authors", mapper.readTree(v.toJson().toString())) }
-        sc(project).properties.rawOrNull("mod", "contact")
-            ?.let { v -> it.set("contact", mapper.readTree(v.toJson().toString())) }
-        sc(project).properties.rawOrNull("mod", "contributors")
-            ?.let { v -> if (v.asList().isNotEmpty()) it.set("contributors", mapper.readTree(v.toJson().toString())) }
-        sc(project).constants["modmenu"]?.let { v ->
-            if (!v) (it.get("entrypoints") as ObjectNode).remove("modmenu")
+        val mapper = tools.jackson.databind.ObjectMapper()
+        val json = mapper.readTree(inputFile.asFile.reader()) as ObjectNode
+        json.let {
+            it.put("id", "mod.id"())
+            it.put("name", "mod.name"())
+            it.put("version", "mod.version"().removeSuffix("-SNAPSHOT"))
+            it.put("description", "mod.description"().trim())
+            it.put("license", "mod.license"())
+            it.put("icon", "${"mod.id"()}_icon.png")
+            sc(project).properties.rawOrNull("mod", "authors")?.asList()
+                ?.let { v -> it.set("authors", mapper.readTree(v.toJson().toString())) }
+            sc(project).properties.rawOrNull("mod", "contact")
+                ?.let { v -> it.set("contact", mapper.readTree(v.toJson().toString())) }
+            sc(project).properties.rawOrNull("mod", "contributors")
+                ?.let { v ->
+                    if (v.asList().isNotEmpty()) it.set(
+                        "contributors",
+                        mapper.readTree(v.toJson().toString())
+                    )
+                }
+            sc(project).constants["modmenu"]?.let { v ->
+                if (!v) (it.get("entrypoints") as ObjectNode).remove("modmenu")
+            }
         }
-    }
 
-    outputFile.writer().use {
-        mapper.writerWithDefaultPrettyPrinter().writeValue(it, json)
+        outputFile.parentFile.mkdirs()
+        outputFile.writer().use {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(it, json)
+        }
     }
 }
 

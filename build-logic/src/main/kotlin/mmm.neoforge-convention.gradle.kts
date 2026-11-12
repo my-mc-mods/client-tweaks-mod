@@ -24,49 +24,65 @@ val generateModMetadataFile = tasks.register("generateModMetadataFile") {
     val outputDir = layout.buildDirectory.dir("generated/mmm/resources")
     outputs.dir(outputDir)
 
-    val inputFile = rootProject.file("src/main/templates/META-INF/neoforge.mods.toml")
-    val outputFile = outputDir.get().file("META-INF/neoforge.mods.toml").asFile
-    inputs.dir(inputFile)
+    val inputFile = rootProject.layout.projectDirectory.file("src/main/templates/META-INF/neoforge.mods.toml")
+    inputs.file(inputFile)
+    inputs.property("mod.id", providers.provider { "mod.id"() })
+    inputs.property("mod.name", providers.provider { "mod.name"() })
+    inputs.property("mod.version", providers.provider { "mod.version"() })
+    inputs.property("mod.description", providers.provider { "mod.description"() })
+    inputs.property("mod.license", providers.provider { "mod.license"() })
+    inputs.property(
+        "mod.authors",
+        providers.provider { sc(project).properties.rawOrNull("mod", "authors")?.toJson()?.toString() ?: "" })
+    inputs.property(
+        "mod.contact",
+        providers.provider { sc(project).properties.rawOrNull("mod", "contact")?.toJson()?.toString() ?: "" })
+    inputs.property(
+        "mod.contributors",
+        providers.provider { sc(project).properties.rawOrNull("mod", "contributors")?.toJson()?.toString() ?: "" })
+    inputs.property("stonecutter.version", providers.provider { sc(project).current.version })
 
-    outputFile.parentFile.mkdirs()
+    doLast {
+        val outputFile = outputDir.get().file("META-INF/neoforge.mods.toml").asFile
+        outputFile.parentFile.mkdirs()
 
-    val toml = Toml().read(inputFile).toMap()
-    toml.let { root ->
-        root["license"] = "mod.license"()
-        val modmenu = root.getPath<MutableMap<String, Any>>("modproperties", "modmenu") ?: mutableMapOf()
-        @Suppress("UNCHECKED_CAST")
-        (root["mods"] as ArrayList<HashMap<String, Any>>)[0].let { mods ->
-            mods["modId"] = "mod.id"()
-            mods["version"] = "mod.version"().removeSuffix("-SNAPSHOT")
-            mods["displayName"] = "mod.name"()
-            mods["description"] = "mod.description"().trim()
-            if (sc(project).current.parsed > "26") mods["iconFile"] = "${"mod.id"()}_icon.png"
-            mods["logoFile"] = "${"mod.id"()}_icon.png"
-            sc(project).properties.rawOrNull("mod", "authors")?.asList()
-                ?.let { v -> mods["authors"] = v.joinToString(", ") }
-            sc(project).properties.rawOrNull("mod", "contact")?.asMap()?.forEach({
-                when (it.key) {
-                    "homepage" -> mods["displayURL"] = it.value.toString()
-                    "issues" -> root["issueTrackerURL"] = it.value.toString()
-                    "sources" -> modmenu["sources"] = it.value.toString()
+        val toml = Toml().read(inputFile.asFile).toMap()
+        toml.let { root ->
+            root["license"] = "mod.license"()
+            val modmenu = root.getPath<MutableMap<String, Any>>("modproperties", "modmenu") ?: mutableMapOf()
+            @Suppress("UNCHECKED_CAST")
+            (root["mods"] as ArrayList<HashMap<String, Any>>)[0].let { mods ->
+                mods["modId"] = "mod.id"()
+                mods["version"] = "mod.version"().removeSuffix("-SNAPSHOT")
+                mods["displayName"] = "mod.name"()
+                mods["description"] = "mod.description"().trim()
+                if (sc(project).current.parsed > "26") mods["iconFile"] = "${"mod.id"()}_icon.png"
+                mods["logoFile"] = "${"mod.id"()}_icon.png"
+                sc(project).properties.rawOrNull("mod", "authors")?.asList()
+                    ?.let { v -> mods["authors"] = v.joinToString(", ") }
+                sc(project).properties.rawOrNull("mod", "contact")?.asMap()?.forEach({
+                    when (it.key) {
+                        "homepage" -> mods["displayURL"] = it.value.toString()
+                        "issues" -> root["issueTrackerURL"] = it.value.toString()
+                        "sources" -> modmenu["sources"] = it.value.toString()
+                    }
+                })
+                (root["dependencies"] as HashMap<String, Any?>).let {
+                    it.remove("generated-at-build-time")?.let { v -> it["mod.id"()] = v }
                 }
-            })
-            (root["dependencies"] as HashMap<String, Any?>).let {
-                it.remove("generated-at-build-time")?.let { v -> it["mod.id"()] = v }
+            }
+            sc(project).properties.rawOrNull("mod", "contributors")?.asList()?.let {
+                if (it.isNotEmpty()) modmenu["contributors"] = it.map { v -> v.toString() }
+            }
+            if (modmenu.isNotEmpty()) {
+                if (!root.containsKey("modproperties")) root["modproperties"] = mutableMapOf<String, Any>()
+                @Suppress("UNCHECKED_CAST")
+                (root["modproperties"] as HashMap<String, Any>)["modmenu"] = modmenu
             }
         }
-        sc(project).properties.rawOrNull("mod", "contributors")?.asList()?.let {
-            if (it.isNotEmpty()) modmenu["contributors"] = it.map { v -> v.toString() }
+        outputFile.writer().use { writer ->
+            TomlWriter().write(toml, writer)
         }
-        if (modmenu.isNotEmpty()) {
-            if (!root.containsKey("modproperties")) root["modproperties"] = mutableMapOf<String, Any>()
-            @Suppress("UNCHECKED_CAST")
-            (root["modproperties"] as HashMap<String, Any>)["modmenu"] = modmenu
-        }
-    }
-
-    outputFile.writer().use { writer ->
-        TomlWriter().write(toml, writer)
     }
 }
 
