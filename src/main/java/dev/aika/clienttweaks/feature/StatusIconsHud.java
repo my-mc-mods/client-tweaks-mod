@@ -1,4 +1,5 @@
-package dev.aika.clienttweaks.feature;
+//? if status_icons {
+/*package dev.aika.clienttweaks.feature;
 
 import dev.aika.clienttweaks.boot.ModConfig;
 import dev.aika.clienttweaks.config.ClientTweaksConfig.StatusIconsConfig.Anchor;
@@ -21,8 +22,8 @@ public final class StatusIconsHud {
         final var mc = Minecraft.getInstance();
         final var player = mc.player;
         //? if >=26.2 {
-        /*if (player == null || mc.gui.hud.isHidden()) return;
-        *///?} else {
+        /^if (player == null || mc.gui.hud.isHidden()) return;
+        ^///?} else {
         if (player == null || mc.options.hideGui) return;
          //?}
 
@@ -43,14 +44,14 @@ public final class StatusIconsHud {
         for (int i = 0; i < icons.size(); i++) {
             int y = baseY + i * (size + spacing);
             //? if >26.3 {
-            /*graphics.blit(net.minecraft.client.gui.GuiPipeline.TEXTURED,
+            /^graphics.blit(net.minecraft.client.gui.GuiPipeline.TEXTURED,
                     icons.get(i), baseX, y, 0, 0, size, size, size, size);
-            *///?} elif >=26 {
+            ^///?} elif >=26 {
             graphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED,
                     icons.get(i), baseX, y, 0, 0, size, size, size, size);
             //?} else {
-            /*graphics.blit(icons.get(i), baseX, y, 0, 0, size, size, size, size);
-             *///?}
+            /^graphics.blit(icons.get(i), baseX, y, 0, 0, size, size, size, size);
+             ^///?}
         }
     }
 
@@ -70,3 +71,4 @@ public final class StatusIconsHud {
         };
     }
 }
+*///?}

@@ -7,7 +7,9 @@ import com.google.common.collect.Sets;
 import dev.aika.clienttweaks.boot.ModConfig;
 import dev.aika.clienttweaks.boot.ModMixinPlugin;
 import dev.aika.clienttweaks.config.ClientTweaksConfig;
-import dev.aika.clienttweaks.config.ClientTweaksConfig.StatusIconsConfig;
+//? if status_icons {
+/*import dev.aika.clienttweaks.config.ClientTweaksConfig.StatusIconsConfig;
+*///?}
 import dev.aika.clienttweaks.feature.ClientPingRefresh;
 import dev.aika.clienttweaks.util.ColorUtil;
 import dev.aika.clienttweaks.util.ComponentUtil;
@@ -118,7 +120,8 @@ public class ModClothConfigScreen {
                         : Component.translatable("config.gizmoclienttweaks.@slider.seconds", value))
                 .build());
 
-        final var statusIcons = eb.startSubCategory(
+        //? if status_icons {
+        /*final var statusIcons = eb.startSubCategory(
                         Component.translatable("config.gizmoclienttweaks.status_icons.@category"))
                 .setTooltip(maybeTooltip(
                         Component.translatable("config.gizmoclienttweaks.status_icons.@tooltip")))
@@ -184,6 +187,7 @@ public class ModClothConfigScreen {
                 .setDefaultValue(defaultConfig.statusIcons()::iconSpacing)
                 .build());
         general.addEntry(statusIcons.build());
+        *///?}
 
         final var numericPing = eb.startSubCategory(
                         Component.translatable("config.gizmoclienttweaks.numeric_ping.@category"))

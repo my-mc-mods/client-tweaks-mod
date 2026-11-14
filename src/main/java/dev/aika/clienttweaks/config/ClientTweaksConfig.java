@@ -25,7 +25,9 @@ public class ClientTweaksConfig {
     private int clientPingRefresh = 0;
 
     private NumericPingConfig numericPing = new NumericPingConfig();
-    private StatusIconsConfig statusIcons = new StatusIconsConfig();
+    //? if status_icons {
+    /*private StatusIconsConfig statusIcons = new StatusIconsConfig();
+    *///?}
 
     private Set<String> disabledMixins = new LinkedHashSet<>();
 
@@ -60,7 +62,8 @@ public class ClientTweaksConfig {
         }
     }
 
-    @Getter @Setter
+    //? if status_icons {
+    /*@Getter @Setter
     @Accessors(fluent = true)
     public static class StatusIconsConfig {
         private boolean showOnFire = true;
@@ -77,4 +80,5 @@ public class ClientTweaksConfig {
             BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
         }
     }
+    *///?}
 }

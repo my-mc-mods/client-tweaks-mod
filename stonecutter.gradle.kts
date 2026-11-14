@@ -35,6 +35,7 @@ stonecutter parameters {
     constants["release"] = properties.get<String>("mod.id") != "template"
     constants["modmenu"] = properties.getOrNull<String>("deps.modmenu") != null
     constants["cloth_config"] = properties.getOrNull<String>("deps.cloth_config") != null
+    constants["status_icons"] = false
     dependencies["fabric_api"] = properties.getOrNull<String>("deps.fabric_api") ?: "0"
 
     replacements {
