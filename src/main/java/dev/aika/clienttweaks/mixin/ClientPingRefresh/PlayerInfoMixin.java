@@ -1,7 +1,6 @@
 package dev.aika.clienttweaks.mixin.ClientPingRefresh;
 
 import com.mojang.authlib.GameProfile;
-import dev.aika.clienttweaks.boot.ModConfig;
 import dev.aika.clienttweaks.feature.ClientPingRefresh;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -17,11 +16,11 @@ public abstract class PlayerInfoMixin {
 
     @Inject(method = "getLatency", at = @At("HEAD"), cancellable = true)
     private void modifyLatency(CallbackInfoReturnable<Integer> cir) {
-        final int interval = ModConfig.get().clientPingRefresh();
-        if (interval < 1 || interval >= 30) return;
-        if (Minecraft.getInstance()
-                .getGameProfile()./*? if >=1.21.9 {*/name()/*?} else {*//*getName()*//*?}*/
-                .equals(this.getProfile()./*? if >=1.21.9 {*/name()/*?} else {*//*getName()*//*?}*/))
-            cir.setReturnValue((int) ClientPingRefresh.getLatencyMs());
+        final var listener = Minecraft.getInstance().getConnection();
+        if (listener == null || !listener.getLocalGameProfile()./*? if >=1.21.9 {*/id()/*?} else {*//*getId()*//*?}*/
+                .equals(this.getProfile()./*? if >=1.21.9 {*/id()/*?} else {*//*getId()*//*?}*/)) return;
+        final int latency = ClientPingRefresh.getLatencyMs(listener);
+        // Keep the server's player-list latency available until an active sample arrives.
+        if (latency >= 0) cir.setReturnValue(latency);
     }
 }

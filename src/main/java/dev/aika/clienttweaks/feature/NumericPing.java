@@ -7,13 +7,10 @@ import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.CommonColors;
 
-import java.awt.*;
+import java.math.BigDecimal;
 
 @UtilityClass
 public final class NumericPing {
-    private int lastLatency = -1;
-    private int lastColor = CommonColors.WHITE;
-
     public void render(Minecraft mc, net.minecraft.client.gui.GuiGraphicsExtractor graphics,
                        int slotWidth, int x, int y, net.minecraft.client.multiplayer.PlayerInfo info) {
         final var conf = ModConfig.get().numericPing();
@@ -24,19 +21,16 @@ public final class NumericPing {
                 "feature.gizmoclienttweaks.numericping.ping",
                 "multiplayer.status.ping", latency);
 
-        if (latency != lastLatency) {
-            Color color = Color.WHITE;
-            for (final var rule : conf.rules()) {
-                if (!rule.range().matches(latency)) continue;
-                color = rule.color();
-                break;
-            }
-            lastColor = ColorUtil.toArgb(color);
-        }
-        lastLatency = latency;
-
         graphics.text(mc.font, ping,
                 x + slotWidth - mc.font.width(ping) - (conf.showPingIcon() ? 13 : 0), y,
-                lastColor);
+                colorForLatency(latency));
+    }
+
+    public int colorForLatency(int latency) {
+        final var value = BigDecimal.valueOf(latency);
+        for (final var rule : ModConfig.get().numericPing().rules()) {
+            if (rule.range().matches(value)) return ColorUtil.toArgb(rule.color());
+        }
+        return CommonColors.WHITE;
     }
 }

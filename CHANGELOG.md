@@ -1,11 +1,24 @@
 # Unreleased
 
+## Added
+
+- **Live Ping/FPS HUD** — displays live FPS and ping in a configurable corner while playing or chatting, hiding in the
+  top corners when the F3 debug screen is open. Enabled by default, with options for either metric alone, compact or
+  labeled text, and a 50–200% scale.
+
 ## Changed
 
 - Config file moved to `config/gizmoclienttweaks/gizmoclienttweaks.json`. Existing `config/gizmoclienttweaks.json` from
   0.1.0 is migrated automatically on first launch.
 - Writes `config/gizmoclienttweaks/available_mixins.txt` listing mixin class names that can be added to
   `disabled_mixins` in the config.
+
+## Fixed
+
+- On NeoForge, the multiplayer server list no longer marks servers as incompatible because they don't have this mod
+  installed.
+- **Client Ping Refresh** now matches your own player list entry by server-assigned UUID instead of launcher username,
+  and binds active ping samples to the current server connection so switching servers never carries over stale latency.
 
 # 0.1.0 - 2026-11-07
 

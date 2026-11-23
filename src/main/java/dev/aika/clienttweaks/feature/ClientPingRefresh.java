@@ -1,8 +1,6 @@
 package dev.aika.clienttweaks.feature;
 
 import dev.aika.clienttweaks.boot.ModConfig;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -11,76 +9,78 @@ import net.minecraft.util.Util;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 @UtilityClass
 public class ClientPingRefresh {
-    private long INTERVAL_MS = TimeUnit.SECONDS.toMillis(1);
     private final long TIMEOUT_MS = TimeUnit.SECONDS.toMillis(5);
 
-    private final AtomicReference<PendingPing> PENDING = new AtomicReference<>();
-
-    @Setter @Getter
-    private volatile long latencyMs = -1;
+    private ClientPacketListener pingListener;
+    private PendingPing pending;
+    private volatile Sample sample;
     private long nextPingAt;
-    private boolean scheduled;
 
     public void tick(Minecraft minecraft) {
-        final int clientPingRefresh = ModConfig.get().clientPingRefresh();
-        if (clientPingRefresh <= 0 || clientPingRefresh >= 30) return;
-
-        ClientPacketListener listener = minecraft.getConnection();
-
-        if (listener == null || !listener.getConnection().isConnected()) {
-            latencyMs = -1;
-            scheduled = false;
-            return;
+        final var listener = minecraft.getConnection();
+        final var request = preparePing(listener, ModConfig.get().clientPingRefresh());
+        if (listener != null && request != null) {
+            listener.getConnection().send(new ServerboundPingRequestPacket(request.token()));
         }
-
-        final long now = Util.getMillis();
-        PendingPing pending = PENDING.get();
-
-        if (pending != null) {
-            if (now - pending.sentAtMs() < TIMEOUT_MS) return;
-
-            if (PENDING.compareAndSet(pending, null)) {
-                latencyMs = -1;
-                nextPingAt = now + INTERVAL_MS;
-                scheduled = true;
-            }
-            return;
-        }
-
-        if (scheduled && now - nextPingAt < 0) return;
-
-        final long token = ThreadLocalRandom.current().nextLong();
-        PendingPing request = new PendingPing(token, now);
-
-        if (!PENDING.compareAndSet(null, request)) return;
-
-        nextPingAt = now + INTERVAL_MS;
-        scheduled = true;
-
-        listener.getConnection().send(new ServerboundPingRequestPacket(token));
     }
 
-    public void onPong(long token) {
-        PendingPing pending = PENDING.get();
+    public int getLatencyMs(ClientPacketListener listener) {
+        final var current = sample;
+        if (current == null || listener == null || current.listener() != listener
+                || !listener.getConnection().isConnected()
+                || isDisabled(ModConfig.get().clientPingRefresh())) return -1;
+        return current.latencyMs();
+    }
 
-        if (pending == null || pending.token() != token) return;
+    private synchronized PendingPing preparePing(ClientPacketListener listener, int interval) {
+        if (isDisabled(interval) || listener == null || !listener.getConnection().isConnected()) listener = null;
 
-        if (!PENDING.compareAndSet(pending, null)) return;
-
-        long elapsedMs = Util.getMillis() - pending.sentAtMs();
-        if (elapsedMs >= 0 && elapsedMs <= TIMEOUT_MS) {
-            latencyMs = (int) elapsedMs;
+        final long now = Util.getMillis();
+        // A sample and any in-flight request belong to the current connection only.
+        if (listener != pingListener) {
+            pingListener = listener;
+            pending = null;
+            sample = null;
+            nextPingAt = now;
         }
+        if (listener == null) return null;
+
+        final long intervalMs = TimeUnit.SECONDS.toMillis(interval);
+
+        if (pending != null) {
+            if (now - pending.sentAtMs() >= TIMEOUT_MS) {
+                pending = null;
+                sample = null;
+                nextPingAt = now + intervalMs;
+            }
+            return null;
+        }
+
+        if (now - nextPingAt < 0) return null;
+        nextPingAt = now + intervalMs;
+        pending = new PendingPing(ThreadLocalRandom.current().nextLong(), now);
+        return pending;
+    }
+
+    public synchronized void onPong(ClientPacketListener listener, long token) {
+        if (listener != pingListener || pending == null || pending.token() != token) return;
+
+        final long elapsedMs = Util.getMillis() - pending.sentAtMs();
+        sample = elapsedMs >= 0 && elapsedMs <= TIMEOUT_MS ? new Sample(listener, (int) elapsedMs) : null;
+        pending = null;
+    }
+
+    private boolean isDisabled(int interval) {
+        return interval < 1 || interval >= 30;
     }
 
     private record PendingPing(long token, long sentAtMs) {
     }
 
-    public static void setInterval(int value) {
-        INTERVAL_MS = TimeUnit.SECONDS.toMillis(value);
+    // Keeps the connection and its latency together so lock-free readers never mix them.
+    private record Sample(ClientPacketListener listener, int latencyMs) {
     }
 }
