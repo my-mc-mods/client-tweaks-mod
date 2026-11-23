@@ -9,6 +9,7 @@ displayName = "generated at build time"
 version = "0.0.0-generated-at-build-time"
 authors = "generated at build time"
 description = "generated at build time"
+displayTest = "IGNORE_ALL_VERSION"
 
 [[dependencies.generated-at-build-time]]
 modId = "neoforge"

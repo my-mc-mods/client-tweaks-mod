@@ -14,6 +14,9 @@ A client-side Minecraft mod that bundles small, configurable quality-of-life twe
 - **Client Ping Refresh** — sends its own ping requests at a configurable interval and uses the measured round-trip time
   for your own entry in the player list, so your latency stays current instead of waiting for the server's update.
   Disabled by default; set the interval to 1–29 seconds to enable it.
+- **Live Ping/FPS HUD** — shows live FPS and ping in a configurable screen corner (including while chat is open) with
+  selectable metrics, text format and 50–200% scale; hides in the top corners when the F3 debug screen is open. Ping
+  uses Client Ping Refresh when available and follows Numeric Ping's color rules.
 
 ### Window focus
 

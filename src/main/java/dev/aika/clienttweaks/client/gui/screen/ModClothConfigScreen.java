@@ -7,10 +7,11 @@ import com.google.common.collect.Sets;
 import dev.aika.clienttweaks.boot.ModConfig;
 import dev.aika.clienttweaks.boot.ModMixinPlugin;
 import dev.aika.clienttweaks.config.ClientTweaksConfig;
+import dev.aika.clienttweaks.config.ClientTweaksConfig.PingFpsHudConfig;
+import dev.aika.clienttweaks.feature.PingFpsHud;
 //? if status_icons {
 /*import dev.aika.clienttweaks.config.ClientTweaksConfig.StatusIconsConfig;
 *///?}
-import dev.aika.clienttweaks.feature.ClientPingRefresh;
 import dev.aika.clienttweaks.util.ColorUtil;
 import dev.aika.clienttweaks.util.ComponentUtil;
 import dev.aika.clienttweaks.util.NumberExpression;
@@ -28,6 +29,7 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -110,10 +112,7 @@ public class ModClothConfigScreen {
                 )
                 .setTooltip(maybeTooltip(
                         Component.translatable("config.gizmoclienttweaks.client_ping_refresh.@tooltip")))
-                .setSaveConsumer(value -> {
-                    conf.clientPingRefresh(value);
-                    ClientPingRefresh.setInterval(value);
-                })
+                .setSaveConsumer(conf::clientPingRefresh)
                 .setDefaultValue(defaultConfig::clientPingRefresh)
                 .setTextGetter(value -> value < 1 || value >= 30
                         ? Component.translatable("config.gizmoclienttweaks.@disabled")
@@ -188,6 +187,47 @@ public class ModClothConfigScreen {
                 .build());
         general.addEntry(statusIcons.build());
         *///?}
+
+        final String hudKey = "config.gizmoclienttweaks.ping_fps_hud.";
+        if (conf.pingFpsHud() == null) conf.pingFpsHud(new PingFpsHudConfig());
+        final var hud = conf.pingFpsHud();
+        final var defaultHud = defaultConfig.pingFpsHud();
+        final var hudCategory = eb.startSubCategory(Component.translatable(hudKey + "@category"))
+                .setExpanded(true);
+        hudCategory.addLast(eb.startBooleanToggle(Component.translatable(hudKey + "enabled"), hud.enabled())
+                .setTooltip(maybeTooltip(Component.translatable(hudKey + "enabled.@tooltip")))
+                .setSaveConsumer(hud::enabled)
+                .setDefaultValue(defaultHud::enabled)
+                .build());
+        hudCategory.addLast(eb.startEnumSelector(Component.translatable(hudKey + "content"),
+                        PingFpsHudConfig.Content.class,
+                        hud.content() != null ? hud.content() : defaultHud.content())
+                .setEnumNameProvider(value -> Component.translatable(hudKey + "content." + value.name().toLowerCase(Locale.ROOT)))
+                .setSaveConsumer(hud::content)
+                .setDefaultValue(defaultHud::content)
+                .build());
+        hudCategory.addLast(eb.startEnumSelector(Component.translatable(hudKey + "anchor"),
+                        PingFpsHudConfig.Anchor.class,
+                        hud.anchor() != null ? hud.anchor() : defaultHud.anchor())
+                .setEnumNameProvider(value -> Component.translatable(hudKey + "anchor." + value.name().toLowerCase(Locale.ROOT)))
+                .setSaveConsumer(hud::anchor)
+                .setDefaultValue(defaultHud::anchor)
+                .build());
+        hudCategory.addLast(eb.startEnumSelector(Component.translatable(hudKey + "format"),
+                        PingFpsHudConfig.Format.class,
+                        hud.format() != null ? hud.format() : defaultHud.format())
+                .setEnumNameProvider(value -> Component.translatable(hudKey + "format." + value.name().toLowerCase(Locale.ROOT)))
+                .setSaveConsumer(hud::format)
+                .setDefaultValue(defaultHud::format)
+                .build());
+        hudCategory.addLast(eb.startIntSlider(Component.translatable(hudKey + "scale"),
+                        Math.clamp(hud.scale(), PingFpsHud.MIN_SCALE, PingFpsHud.MAX_SCALE),
+                        PingFpsHud.MIN_SCALE, PingFpsHud.MAX_SCALE)
+                .setSaveConsumer(hud::scale)
+                .setDefaultValue(defaultHud::scale)
+                .setTextGetter(value -> Component.literal(value + "%"))
+                .build());
+        general.addEntry(hudCategory.build());
 
         final var numericPing = eb.startSubCategory(
                         Component.translatable("config.gizmoclienttweaks.numeric_ping.@category"))

@@ -19,6 +19,8 @@
     "HideInsecureWarningToast.ToastManagerMixin",
     "LanguageCodeFilter.LanguageSelectionListMixin",
     "NumericPing.PlayerTabOverlayMixin",
+    "PingFpsHud.ChatScreenMixin",
+    "PingFpsHud.HudMixin",
     "RemoveRealmsButton.TitleScreenMixin",
     "Unfocused.SoundEngineMixin",
     "Unfocused.WindowMixin"

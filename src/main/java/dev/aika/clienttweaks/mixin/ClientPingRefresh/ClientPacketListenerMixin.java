@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ClientPacketListenerMixin {
     @Inject(method = "handlePongResponse", at = @At("HEAD"))
     private void onPong(ClientboundPongResponsePacket packet, CallbackInfo ci) {
-        ClientPingRefresh.onPong(packet.time());
+        ClientPingRefresh.onPong((ClientPacketListener) (Object) this, packet.time());
     }
 }

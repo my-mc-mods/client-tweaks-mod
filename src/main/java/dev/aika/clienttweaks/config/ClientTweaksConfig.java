@@ -24,12 +24,35 @@ public class ClientTweaksConfig {
     private int unfocusedFpsLimit = 10;
     private int clientPingRefresh = 0;
 
+    private PingFpsHudConfig pingFpsHud = new PingFpsHudConfig();
     private NumericPingConfig numericPing = new NumericPingConfig();
     //? if status_icons {
     /*private StatusIconsConfig statusIcons = new StatusIconsConfig();
     *///?}
 
     private Set<String> disabledMixins = new LinkedHashSet<>();
+
+    @Getter @Setter
+    @Accessors(fluent = true)
+    public static class PingFpsHudConfig {
+        private boolean enabled = true;
+        private Content content = Content.PING_AND_FPS;
+        private Anchor anchor = Anchor.TOP_LEFT;
+        private Format format = Format.COMPACT;
+        private int scale = 100;
+
+        public enum Content {
+            PING_AND_FPS, PING_ONLY, FPS_ONLY
+        }
+
+        public enum Anchor {
+            TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
+        }
+
+        public enum Format {
+            COMPACT, LABELED
+        }
+    }
 
     @Getter @Setter
     @Accessors(fluent = true)
