@@ -1,0 +1,37 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Java / Kotlin / Gradle 脚本: 4 空格缩进
+[*.{java,kt,kts}]
+indent_style = space
+indent_size = 4
+
+# JSON: 2 空格缩进，文件末尾不加换行
+[*.json]
+indent_style = space
+indent_size = 2
+insert_final_newline = false
+
+# XML（log4j2.xml、.idea 配置）: 项目里用的是 tab
+[*.xml]
+indent_style = tab
+
+# Markdown: 行尾两个空格表示强制换行，不能删
+[*.md]
+trim_trailing_whitespace = false
+
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# NeoForge 访问转换器 / classTweaker：按惯例末尾不留换行
+[*.cfg]
+insert_final_newline = false
+
+[*.ct]
+insert_final_newline = false
