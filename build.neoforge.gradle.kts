@@ -21,7 +21,7 @@ dependencies {
 
 neoForge {
     rootProject.file("src/main/resources/META-INF/accesstransformer.cfg").takeIf(File::exists)?.let {
-        accessTransformers.from(sc.process(it, "build/processed.cfg"))
+        accessTransformers.from(sc.process(it, "build/processed.cfg").apply(File::stripStonecutterAccessComments))
     }
 
     version = "deps.neoforge"()

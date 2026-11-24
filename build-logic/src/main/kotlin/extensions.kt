@@ -10,8 +10,15 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.named
+import java.io.File
 
 fun sc(project: Project) = project.extensions.findByType(StonecutterBuildExtension::class.java)!!
+
+private val stonecutterAccessComments = Regex("^#(?:\\?|(?=public |accessible )).*(?:\\R|$)", RegexOption.MULTILINE)
+
+fun File.stripStonecutterAccessComments() {
+    writeText(readText().replace(stonecutterAccessComments, ""))
+}
 
 val Project.isFabric get() = sc(project).current.project.endsWith("-fabric")
 val Project.requiredJava: JavaVersion

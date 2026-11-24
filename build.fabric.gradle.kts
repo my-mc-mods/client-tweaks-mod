@@ -57,7 +57,7 @@ dependencies {
 
 loom {
     rootProject.file("src/main/resources/${"mod.id"()}.ct").takeIf(File::exists)?.let {
-        accessWidenerPath = sc.process(it, "build/processed.ct")
+        accessWidenerPath = sc.process(it, "build/processed.ct").apply(File::stripStonecutterAccessComments)
     }
 
     decompilerOptions.named("vineflower") {

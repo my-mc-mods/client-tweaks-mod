@@ -54,6 +54,12 @@ tasks {
         }
 
         filesMatching("*.mixins.json") { expand("java" to "JAVA_${requiredJava.majorVersion}") }
+
+        doLast {
+            listOf("META-INF/accesstransformer.cfg", "${"mod.id"()}.ct").forEach { path ->
+                destinationDir.resolve(path).takeIf(File::exists)?.stripStonecutterAccessComments()
+            }
+        }
     }
 
     // https://github.com/projectlombok/lombok/issues/3852#issuecomment-3408877430
