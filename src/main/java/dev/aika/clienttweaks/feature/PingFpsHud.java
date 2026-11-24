@@ -5,7 +5,6 @@ import dev.aika.clienttweaks.config.ClientTweaksConfig.PingFpsHudConfig;
 import dev.aika.clienttweaks.util.ColorUtil;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
@@ -18,7 +17,6 @@ public class PingFpsHud {
     private final String TEXT_KEY = "feature.gizmoclienttweaks.ping_fps_hud.";
     private final Component MISSING_PING = Component.literal("--");
     private final String SEPARATOR = " | ";
-    private final int VALUE_DIGITS = 4;
     private final int MARGIN = 4;
     private final int CHAT_INPUT_INSET = 16;
     public final int MIN_SCALE = 50;
@@ -40,11 +38,10 @@ public class PingFpsHud {
         final var anchor = config.anchor() != null ? config.anchor() : PingFpsHudConfig.Anchor.TOP_LEFT;
         final var content = config.content() != null ? config.content() : PingFpsHudConfig.Content.PING_AND_FPS;
         final var format = config.format() != null ? config.format() : PingFpsHudConfig.Format.COMPACT;
-        final boolean top = anchor == PingFpsHudConfig.Anchor.TOP_LEFT
-                || anchor == PingFpsHudConfig.Anchor.TOP_RIGHT;
+        final boolean top = anchor == PingFpsHudConfig.Anchor.TOP_LEFT || anchor == PingFpsHudConfig.Anchor.TOP_RIGHT;
         //? if <1.21.11 {
         /*if (top && minecraft.getDebugOverlay().showDebugScreen()) return;
-        *///?} else {
+         *///?} else {
         if (top && minecraft.debugEntries.isOverlayVisible()) return;
         //?}
         if (fromChat ? !(screen instanceof ChatScreen) : screen != null) return;
@@ -53,11 +50,13 @@ public class PingFpsHud {
         final boolean showFps = content != PingFpsHudConfig.Content.PING_ONLY;
         final boolean showPing = content != PingFpsHudConfig.Content.FPS_ONLY;
         final var font = minecraft.font;
-        final int numberWidth = numberSlotWidth(font);
-        final int fpsWidth = showFps ? numberWidth + font.width(fpsText("", labeled)) : 0;
-        final int pingWidth = showPing ? Math.max(
-                numberWidth + font.width(pingText(Component.translatable(TEXT_KEY + "ping.compact", ""), labeled)),
-                font.width(pingText(MISSING_PING, labeled))) : 0;
+        final int fps = showFps ? minecraft.getFps() : 0;
+        final var fpsComponent = showFps ? fpsText(Integer.toString(fps), labeled) : null;
+        final int fpsWidth = fpsComponent == null ? 0 : font.width(fpsComponent);
+        final int latency = showPing ? getLatency(minecraft, player) : -1;
+        final var pingValue = latency < 0 ? MISSING_PING : Component.translatable(TEXT_KEY + "ping.compact", latency);
+        final var pingComponent = showPing ? pingText(pingValue, labeled) : null;
+        final int pingWidth = pingComponent == null ? 0 : font.width(pingComponent);
         final int separatorWidth = showFps && showPing ? font.width(SEPARATOR) : 0;
 
         final boolean alignRight = switch (anchor) {
@@ -67,11 +66,11 @@ public class PingFpsHud {
         // The config file is user-editable, so keep the scale in the range the slider offers.
         final float scale = Math.clamp(config.scale(), MIN_SCALE, MAX_SCALE) / 100f;
         final float originX = alignRight
-                ? graphics.guiWidth() - MARGIN - (fpsWidth + separatorWidth + pingWidth) * scale
-                : MARGIN;
+            ? graphics.guiWidth() - MARGIN - (fpsWidth + separatorWidth + pingWidth) * scale
+            : MARGIN;
         // Leave the chat input bar clear when drawing after the chat screen.
         final float originY = top ? MARGIN
-                : graphics.guiHeight() - MARGIN - font.lineHeight * scale - (fromChat ? CHAT_INPUT_INSET : 0);
+            : graphics.guiHeight() - MARGIN - font.lineHeight * scale - (fromChat ? CHAT_INPUT_INSET : 0);
 
         //? if >=1.21.11
         graphics.nextStratum();
@@ -89,9 +88,7 @@ public class PingFpsHud {
         try {
             int x = 0;
             if (showFps) {
-                final int fps = minecraft.getFps();
-                final var text = fpsText(Integer.toString(fps), labeled);
-                graphics.text(font, text, alignRight ? x + fpsWidth - font.width(text) : x, 0, fpsColor(fps), true);
+                graphics.text(font, fpsComponent, x, 0, fpsColor(fps), true);
                 x += fpsWidth;
             }
             if (showFps && showPing) {
@@ -99,28 +96,15 @@ public class PingFpsHud {
                 x += separatorWidth;
             }
             if (showPing) {
-                final int latency = getLatency(minecraft, player);
-                final var value = latency < 0 ? MISSING_PING : Component.translatable(TEXT_KEY + "ping.compact", latency);
-                final var text = pingText(value, labeled);
-                graphics.text(font, text, alignRight ? x + pingWidth - font.width(text) : x, 0,
-                        NumericPing.colorForLatency(latency), true);
+                graphics.text(font, pingComponent, x, 0, NumericPing.colorForLatency(latency), true);
             }
         } finally {
             //? if <1.21.11 {
             /*pose.popPose();
-            *///?} else {
+             *///?} else {
             pose.popMatrix();
             //?}
         }
-    }
-
-    private int numberSlotWidth(Font font) {
-        // Measure the widest digit to account for proportional resource-pack fonts.
-        int widestDigit = 0;
-        for (char digit = '0'; digit <= '9'; digit++) {
-            widestDigit = Math.max(widestDigit, font.width(Character.toString(digit)));
-        }
-        return widestDigit * VALUE_DIGITS;
     }
 
     private Component pingText(Component value, boolean labeled) {
