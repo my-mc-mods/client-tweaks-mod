@@ -46,7 +46,7 @@ public final class StatusIconsHud {
             //? if >26.3 {
             /^graphics.blit(net.minecraft.client.gui.GuiPipeline.TEXTURED,
                     icons.get(i), baseX, y, 0, 0, size, size, size, size);
-            ^///?} elif >=26 {
+            ^///?} elif >=26.1 {
             graphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED,
                     icons.get(i), baseX, y, 0, 0, size, size, size, size);
             //?} else {

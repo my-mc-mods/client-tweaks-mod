@@ -18,14 +18,14 @@ public abstract class PlayerTabOverlayMixin {
     @Shadow @Final private Minecraft minecraft;
 
     @ModifyExpressionValue(
-            method = /*? if >26.3 {*//*"extractContents"*//*?} elif >26 {*/"extractRenderState"/*?} else {*//*"render"*//*?}*/,
+            method = /*? if >26.3 {*//*"extractContents"*//*?} elif >=26.1 {*/"extractRenderState"/*?} else {*//*"render"*//*?}*/,
             at = @At(value = "CONSTANT", args = "intValue=13"))
     private int modifySlotWidth(int original) {
         if (!ModConfig.get().numericPing().enabled()) return original;
         return original + ModConfig.get().numericPing().slotPaddingLeft();
     }
 
-    //? if >=26 {
+    //? if >=26.1 {
     @Inject(method = "extractPingIcon", at = @At("HEAD"), cancellable = true)
     private void renderPingIcon(net.minecraft.client.gui.GuiGraphicsExtractor graphics, //?} else {
     /*@Inject(method = "renderPingIcon", at = @At("HEAD"), cancellable = true)

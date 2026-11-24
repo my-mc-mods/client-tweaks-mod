@@ -16,11 +16,9 @@ public abstract class ScreenEffectRendererMixin {
     private static void submitFire(com.mojang.blaze3d.vertex.PoseStack poseStack,
                                    net.minecraft.client.renderer.SubmitNodeCollector submitNodeCollector,
                                    net.minecraft.client.renderer.texture.TextureAtlasSprite sprite,
-                                   CallbackInfo ci) { *///?} elif >1.21.1 <26.2 {
+                                   CallbackInfo ci) { *///?} else {
     @Inject(method = "renderFire", cancellable = true, at = @At("HEAD"))
-    private static void renderScreenEffect(CallbackInfo ci) { //?} else {
-    /*@Inject(method = "renderFire", cancellable = true, at = @At("HEAD"))
-    private static void renderScreenEffect(CallbackInfo ci) { *///?}
+    private static void renderScreenEffect(CallbackInfo ci) { //?}
         if (!ModConfig.get().hideFireOverlay()) return;
         final var player = Minecraft.getInstance().player;
         if (player == null || player.isSpectator()) return;

@@ -8,7 +8,7 @@
     "defaultRequire": 1
   },
   "client": [
-    "Accessor.SoundEngineAccessor",
+    "Unfocused.SoundEngineAccessor",
     "ClientPingRefresh.ClientPacketListenerMixin",
     "ClientPingRefresh.PlayerInfoMixin",
     "ClothConfigFix.DynamicElementListWidget_ElementEntryMixin",

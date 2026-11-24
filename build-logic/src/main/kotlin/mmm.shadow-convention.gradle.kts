@@ -8,7 +8,7 @@ val shadowCommon = configurations.create("shadowCommon").apply {
     isCanBeConsumed = false
 }
 
-val obfuscated = sc(project).current.parsed < "26"
+val obfuscated = sc(project).current.parsed < "26.1"
 
 tasks {
     shadowJar {

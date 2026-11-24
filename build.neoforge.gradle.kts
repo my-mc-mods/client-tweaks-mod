@@ -26,7 +26,7 @@ neoForge {
 
     version = "deps.neoforge"()
 
-    if (sc.current.parsed < "26") sc.properties.getOrNull<String>("parchment.mappings_version")?.let {
+    if (sc.current.parsed < "26.1") sc.properties.getOrNull<String>("parchment.mappings_version")?.let {
         parchment {
             minecraftVersion =
                 sc.properties.getOrNull<String>("parchment.minecraft_version") ?: sc.current.parsed.toString()

@@ -32,7 +32,7 @@ private fun TaskProvider<*>.archiveFile(): Provider<RegularFile> =
 
 val Project.modJar
     get() = when {
-        !isFabric || sc(project).current.parsed >= "26" -> project.tasks.named<Jar>("jar").archiveFile()
+        !isFabric || sc(project).current.parsed >= "26.1" -> project.tasks.named<Jar>("jar").archiveFile()
         else -> project.tasks.named("remapJar").archiveFile()
     }
 

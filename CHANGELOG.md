@@ -8,6 +8,8 @@
 
 ## Changed
 
+- The Mixins page now groups mixins by feature and only lists those available for the current Minecraft version and
+  installed dependencies.
 - Config file moved to `config/gizmoclienttweaks/gizmoclienttweaks.json`. Existing `config/gizmoclienttweaks.json` from
   0.1.0 is migrated automatically on first launch.
 - Writes `config/gizmoclienttweaks/available_mixins.txt` listing mixin class names that can be added to

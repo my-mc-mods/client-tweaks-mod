@@ -43,7 +43,7 @@ dependencies {
 }
 
 dependencies {
-    if (sc.current.parsed < "26") {
+    if (sc.current.parsed < "26.1") {
         @Suppress("UnstableApiUsage")
         mappings(loom.layered {
             officialMojangMappings()

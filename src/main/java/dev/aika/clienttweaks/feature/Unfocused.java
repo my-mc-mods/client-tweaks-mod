@@ -34,8 +34,8 @@ public class Unfocused {
     private void refreshMasterVolume() {
         //? if >=1.21.11 {
         Minecraft.getInstance().getSoundManager().refreshCategoryVolume(net.minecraft.sounds.SoundSource.MASTER); //?} else {
-        /*var soundEngine = (dev.aika.clienttweaks.mixin.Accessor.SoundEngineAccessor)
-                Minecraft.getInstance().getSoundManager().soundEngine;
+        /*var engine = Minecraft.getInstance().getSoundManager().soundEngine;
+        if (!(engine instanceof dev.aika.clienttweaks.mixin.Unfocused.SoundEngineAccessor soundEngine)) return;
         if (!soundEngine.clienttweaks$isLoaded()) return;
 
         soundEngine.clienttweaks$getInstanceToChannel().forEach((instance, handle) -> {
@@ -46,6 +46,6 @@ public class Unfocused {
 
     private void setFramerateLimit(int limit) {
         Minecraft.getInstance()./*? if >1.21.1 {*/getFramerateLimitTracker()/*?} else {*//*getWindow()*//*?}*/
-                .setFramerateLimit(limit);
+            .setFramerateLimit(limit);
     }
 }

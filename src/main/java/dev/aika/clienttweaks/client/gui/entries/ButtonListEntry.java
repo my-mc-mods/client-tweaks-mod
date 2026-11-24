@@ -53,20 +53,20 @@ public class ButtonListEntry extends TextListEntry {
         return this.widgets;
     }
 
-    @Override //? if >=26 {
+    @Override //? if >=26.1 {
     public void extractRenderState(
             net.minecraft.client.gui.GuiGraphicsExtractor graphics, //?} else {
     /*public void render(
             net.minecraft.client.gui.GuiGraphicsExtractor graphics,*///?}
             int index, int y, int x, int entryWidth, int entryHeight,
             int mouseX, int mouseY, boolean isHovered, float delta) {
-        //? if >=26 {
+        //? if >=26.1 {
         super.extractRenderState(graphics, index, y, x, entryWidth, entryHeight, mouseX, mouseY, isHovered, delta); //?} else
         //super.render(graphics, index, y, x, entryWidth, entryHeight, mouseX, mouseY, isHovered, delta);
 
         this.buttonWidget.setY(y);
         this.buttonWidget.setX(x + entryWidth - 150);
-        //? if >=26 {
+        //? if >=26.1 {
         this.buttonWidget.extractRenderState(graphics, mouseX, mouseY, delta); //?} else
         //this.buttonWidget.render(graphics, mouseX, mouseY, delta);
     }

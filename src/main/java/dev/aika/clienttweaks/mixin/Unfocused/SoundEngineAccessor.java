@@ -1,6 +1,7 @@
-package dev.aika.clienttweaks.mixin.Accessor;
+package dev.aika.clienttweaks.mixin.Unfocused;
 
-import net.minecraft.client.resources.sounds.SoundInstance;
+//? if <1.21.11 {
+/*import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.ChannelAccess;
 import net.minecraft.client.sounds.SoundEngine;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,3 +23,8 @@ public interface SoundEngineAccessor {
     @Invoker("calculateVolume")
     float clienttweaks$calculateVolume(SoundInstance instance);
 }
+*///?} else {
+@org.spongepowered.asm.mixin.Mixin(net.minecraft.client.Minecraft.class)
+public abstract class SoundEngineAccessor {
+}
+//?}

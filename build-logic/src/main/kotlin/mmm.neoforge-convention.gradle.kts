@@ -56,17 +56,17 @@ val generateModMetadataFile = tasks.register("generateModMetadataFile") {
                 mods["version"] = "mod.version"().removeSuffix("-SNAPSHOT")
                 mods["displayName"] = "mod.name"()
                 mods["description"] = "mod.description"().trim()
-                if (sc(project).current.parsed > "26") mods["iconFile"] = "${"mod.id"()}_icon.png"
+                if (sc(project).current.parsed >= "26.1") mods["iconFile"] = "${"mod.id"()}_icon.png"
                 mods["logoFile"] = "${"mod.id"()}_icon.png"
                 sc(project).properties.rawOrNull("mod", "authors")?.asList()
                     ?.let { v -> mods["authors"] = v.joinToString(", ") }
-                sc(project).properties.rawOrNull("mod", "contact")?.asMap()?.forEach({
+                sc(project).properties.rawOrNull("mod", "contact")?.asMap()?.forEach {
                     when (it.key) {
                         "homepage" -> mods["displayURL"] = it.value.toString()
                         "issues" -> root["issueTrackerURL"] = it.value.toString()
                         "sources" -> modmenu["sources"] = it.value.toString()
                     }
-                })
+                }
                 (root["dependencies"] as HashMap<String, Any?>).let {
                     it.remove("generated-at-build-time")?.let { v -> it["mod.id"()] = v }
                 }
