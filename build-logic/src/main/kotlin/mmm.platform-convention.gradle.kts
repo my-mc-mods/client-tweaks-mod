@@ -85,8 +85,17 @@ publishing {
     }
 }
 
+val curseProjectId = sc(project).properties.getOrNull<String>("mod.curseProjectId")?.takeIf(String::isNotBlank)
+val modrinthProjectId = sc(project).properties.getOrNull<String>("mod.modrinthProjectId")?.takeIf(String::isNotBlank)
+
 publishMods {
-    dryRun.set(providers.gradleProperty("publishMods.dryRun").map(String::toBoolean).orElse(true))
+    dryRun.set(providers.gradleProperty("publishMods.dryRun").map { value ->
+        when (value) {
+            "true" -> true
+            "false" -> false
+            else -> error("publishMods.dryRun must be 'true' or 'false', got: '$value'")
+        }
+    }.orElse(true))
 
     type.set(if (isSnapshot) ALPHA else STABLE)
     file.set(modJar)
@@ -105,14 +114,26 @@ publishMods {
             ?: error("No CHANGELOG.md section found for version $modVersionString")
     }
 
-    curseforge {
-        projectId.set(sc(project).properties.getOrNull<String>("mod.curseProjectId"))
-        accessToken.set(providers.gradleProperty("CURSEFORGE_TOKEN"))
+    if (curseProjectId != null) {
+        curseforge {
+            projectId.set(curseProjectId)
+            accessToken.set(providers.gradleProperty("CURSEFORGE_TOKEN"))
 
-        compatibleVersions.forEach { minecraftVersions.add(it) }
-        optional("cloth-config")
-        changelogType.set("markdown")
-        client = true
+            compatibleVersions.forEach { minecraftVersions.add(it) }
+            changelogType.set("markdown")
+        }
+    }
+
+    if (modrinthProjectId != null) {
+        modrinth {
+            projectId.set(modrinthProjectId)
+            accessToken.set(providers.environmentVariable("MODRINTH_TOKEN"))
+
+            compatibleVersions.forEach {
+                // CurseForge accepts snapshot aliases; Modrinth requires the exact snapshot identifier.
+                minecraftVersions.add(if (it.endsWith("-snapshot")) sc(project).current.version else it)
+            }
+        }
     }
 }
 

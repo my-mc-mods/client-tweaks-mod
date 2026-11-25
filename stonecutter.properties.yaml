@@ -14,6 +14,7 @@ mod:
     sources: "https://github.com/my-mc-mods/client-tweaks-mod"
     issues: "https://github.com/my-mc-mods/client-tweaks-mod/issues"
   curseProjectId: "1689768"
+  modrinthProjectId: "a1daHeRJ"
 
 # https://fabricmc.net/develop/
 deps.fabric_loader: "0.20.1"

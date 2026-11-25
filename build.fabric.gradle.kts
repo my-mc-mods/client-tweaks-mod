@@ -55,6 +55,25 @@ dependencies {
     }
 }
 
+publishMods {
+    if ("curseforge" in platforms.names) {
+        curseforge {
+            requires("fabric-api")
+            if (findProperty("deps.cloth_config") != null) optional("cloth-config")
+            client = true
+        }
+    }
+
+    if ("modrinth" in platforms.names) {
+        modrinth {
+            requires("fabric-api")
+            if (findProperty("deps.modmenu") != null) optional("modmenu")
+            if (findProperty("deps.cloth_config") != null) optional("cloth-config")
+            environment.set(CLIENT_ONLY)
+        }
+    }
+}
+
 loom {
     rootProject.file("src/main/resources/${"mod.id"()}.ct").takeIf(File::exists)?.let {
         accessWidenerPath = sc.process(it, "build/processed.ct").apply(File::stripStonecutterAccessComments)

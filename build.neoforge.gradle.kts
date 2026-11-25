@@ -19,6 +19,22 @@ dependencies {
     }
 }
 
+publishMods {
+    if ("curseforge" in platforms.names) {
+        curseforge {
+            if (findProperty("deps.cloth_config") != null) optional("cloth-config")
+            client = true
+        }
+    }
+
+    if ("modrinth" in platforms.names) {
+        modrinth {
+            if (findProperty("deps.cloth_config") != null) optional("cloth-config")
+            environment.set(CLIENT_ONLY)
+        }
+    }
+}
+
 neoForge {
     rootProject.file("src/main/resources/META-INF/accesstransformer.cfg").takeIf(File::exists)?.let {
         accessTransformers.from(sc.process(it, "build/processed.cfg").apply(File::stripStonecutterAccessComments))
